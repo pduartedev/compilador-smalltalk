@@ -85,7 +85,7 @@ TOKEN : {
 | < TOKEN_semicolon: ";" >
 | < TOKEN_comma: "," >
 | < TOKEN_pipe: "|" >
-| < TOKEN_array_begin: "#{" >
+| < TOKEN_array_begin: "#(" >
 | < TOKEN_left_brace: "{" >
 | < TOKEN_right_brace: "}" >
 

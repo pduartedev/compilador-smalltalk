@@ -1,0 +1,152 @@
+Crate -> MethodDefinition
+Crate -> ''
+
+
+MethodDefinition -> MessagePattern TemporariesOpt StatementsOpt
+
+MessagePattern -> UnaryPattern
+MessagePattern -> BinaryPattern
+MessagePattern -> KeywordPattern
+
+UnaryPattern -> TOKEN_identifier
+
+BinaryPattern -> TOKEN_binary_selector MethodArgument
+
+MethodArgument -> TOKEN_identifier
+
+KeywordPattern -> KeywordPatternElement KeywordPatternElementList
+
+KeywordPatternElement -> TOKEN_keyword MethodArgument
+
+KeywordPatternElementList -> KeywordPatternElement KeywordPatternElementList
+KeywordPatternElementList -> ''
+
+TemporariesOpt -> Temporaries
+TemporariesOpt -> ''
+
+Temporaries -> TOKEN_pipe TemporaryVariableList TOKEN_pipe
+
+TemporaryVariableList -> TOKEN_identifier TemporaryVariableListTail
+TemporaryVariableList -> ''
+
+TemporaryVariableListTail -> TOKEN_identifier TemporaryVariableListTail
+TemporaryVariableListTail -> ''
+
+
+StatementsOpt -> Statements
+StatementsOpt -> ''
+
+Statements -> Statement StatementsTail
+
+Statement -> ReturnStatement
+Statement -> Expression
+
+StatementsTail -> TOKEN_period Statement StatementsTail
+StatementsTail -> TOKEN_period
+StatementsTail -> ''
+
+ReturnStatement -> TOKEN_return_operator Expression
+
+
+Expression -> Assignment
+Expression -> KeywordExpression
+
+Assignment -> TOKEN_identifier TOKEN_assignment_operator Expression
+
+KeywordExpression -> BinaryExpression KeywordMessageOpt
+
+KeywordMessageOpt -> KeywordMessage
+KeywordMessageOpt -> ''
+
+KeywordMessage -> KeywordPair KeywordMessageTail
+
+KeywordMessageTail -> KeywordPair KeywordMessageTail
+KeywordMessageTail -> ''
+
+KeywordPair -> TOKEN_keyword BinaryExpression
+
+BinaryExpression -> UnaryExpression BinaryMessageOpt
+
+BinaryMessageOpt -> BinaryMessage BinaryMessageTail
+BinaryMessageOpt -> ''
+
+BinaryMessageTail -> BinaryMessage BinaryMessageTail
+BinaryMessageTail -> ''
+
+BinaryMessage -> TOKEN_binary_selector UnaryExpression
+
+UnaryExpression -> Primary UnaryMessageOpt
+
+UnaryMessageOpt -> UnaryMessage UnaryMessageTail
+UnaryMessageOpt -> ''
+
+UnaryMessageTail -> UnaryMessage UnaryMessageTail
+UnaryMessageTail -> ''
+
+UnaryMessage -> TOKEN_identifier
+
+Primary -> TOKEN_identifier
+Primary -> Literal
+Primary -> BlockConstructor
+Primary -> TOKEN_left_paren Expression TOKEN_right_paren
+Primary -> TOKEN_self
+Primary -> TOKEN_super
+Primary -> TOKEN_true
+Primary -> TOKEN_false
+Primary -> TOKEN_nil
+
+CascadedMessages -> Expression TOKEN_semicolon CascadedMessageList
+
+CascadedMessageList -> UnaryMessage TOKEN_semicolon CascadedMessageList
+CascadedMessageList -> BinaryMessage TOKEN_semicolon CascadedMessageList
+CascadedMessageList -> KeywordMessage TOKEN_semicolon CascadedMessageList
+CascadedMessageList -> UnaryMessage
+CascadedMessageList -> BinaryMessage
+CascadedMessageList -> KeywordMessage
+
+
+Literal -> NumberLiteral
+Literal -> StringLiteral
+Literal -> CharacterLiteral
+Literal -> SymbolLiteral
+Literal -> ArrayLiteral
+
+NumberLiteral -> TOKEN_decimal_integer
+NumberLiteral -> TOKEN_radix_integer
+NumberLiteral -> TOKEN_float
+NumberLiteral -> TOKEN_scaled_decimal
+
+StringLiteral -> TOKEN_quoted_string
+StringLiteral -> TOKEN_hashed_string
+
+CharacterLiteral -> TOKEN_quoted_character
+
+SymbolLiteral -> TOKEN_quoted_unary_selector
+SymbolLiteral -> TOKEN_quoted_binary_selector
+SymbolLiteral -> TOKEN_quoted_keyword_selector
+
+ArrayLiteral -> TOKEN_array_begin ArrayElements TOKEN_right_paren
+
+ArrayElements -> ArrayElement ArrayElementsTail
+ArrayElements -> ''
+
+ArrayElementsTail -> ArrayElement ArrayElementsTail
+ArrayElementsTail -> ''
+
+ArrayElement -> Literal
+ArrayElement -> TOKEN_identifier
+
+
+BlockConstructor -> TOKEN_left_bracket BlockBody TOKEN_right_bracket
+
+BlockBody -> BlockArgumentsOpt TemporariesOpt StatementsOpt
+
+BlockArgumentsOpt -> BlockArguments
+BlockArgumentsOpt -> ''
+
+BlockArguments -> BlockArgument BlockArgumentsTail TOKEN_pipe
+
+BlockArgument -> TOKEN_colon TOKEN_identifier
+
+BlockArgumentsTail -> BlockArgument BlockArgumentsTail
+BlockArgumentsTail -> ''

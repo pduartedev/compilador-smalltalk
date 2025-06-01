@@ -1,0 +1,25 @@
+# Gramática para a linguagem Smalltalk
+# Analisador Sintático - LABORATORIO 2 - COMPILADORES 2025
+# Baseado no ANSI Smalltalk Standard e nos requisitos do lab02.pdf
+
+# Autor: Patrick Duarte Pimenta
+
+# DEFINIÇÃO
+
+# -> Símbolos não-terminais começam com letra maiúscula estilo "camel case"
+# -> Símbolos não-terminais precedidos de "?"são identificados como opcionais
+# -> Símbolos terminais são representados como tokens do analisador léxico
+# -> Uma transição vazia é definida como [A -> "]
+# -> Símbolos representados por "(" e ")" serão identificados como List
+# -> Símbolos representados por "*" serão identificados como Star (KLENE STAR)
+# -> Símbolos representados por "+" serão identificados como Plus (KLENE PLUS), Tail indicado o final
+
+# ORDEM
+# 0) Símbolo Inicial (OK)
+# 1) Definição de Método (ANSI Smalltalk Standard Sec 3.4.2) (OK)
+# 2) Padrões de Mensagem (ANSI Smalltalk Standard Sec 3.4.2) (OK)
+# 3) Instruções (Statements) (ANSI Smalltalk Standard Sec 3.4.5) (OK)
+# 4) Expressões, Atribuições e Mensagens (ANSI Smalltalk Standard Sec 3.4.5.2, 3.4.5.3) (OK)
+# 5) Mensagens (Estruturadas para Precedência: Unária > Binária > Palavra-chave) (OK)
+# 6) Literais (ANSI Smalltalk Standard Sec 3.4.6)
+# 7) Estruturas de Bloco (ANSI Smalltalk Standard Sec 3.4.4)

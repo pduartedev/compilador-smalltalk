@@ -1,102 +1,99 @@
-"SMALLTALK: CONVERSÃO DE UM PROGRAMA EM ESCRITO EM C (.c) PARA SMALLTALK (.st)"
+"Implementação equivalente ao programa C fornecido"
 
-" Definição da classe Ponto com variáveis de instância x e y "
+"Definição da classe Ponto (equivalente à estrutura ponto_t)"
 Object subclass: Ponto [
     | x y |
-
-    "SIMILAR AO GETTER DE UMA LINGUAGEM OO moderna"
+    
+    "Métodos de acesso"
     x [
         ^x
     ]
-
-    "SIMILAR AO SETTER"
-    x: anInteger [
-        x := anInteger
+    
+    x: umValor [
+        x := umValor
     ]
-
+    
     y [
         ^y
     ]
-
-    y: anInteger [
-        y := anInteger
+    
+    y: umValor [
+        y := umValor
+    ]
+    
+    "Inicialização"
+    x: valorX y: valorY [
+        x := valorX.
+        y := valorY.
+        ^self
     ]
 ]
 
-"Classe utilitária #Utils para conter o método func: n:"
-Object subclass: Utils [
-    | dummy |
-]
-
-Utils class extend [
-    func: pontoArray n: n [
-        | res i temp point |
-
-        "If (caso base): n <= 0"
-        n <= 0 ifTrue: [ ^ 1.0 ].
-
-        "If (caso base): n = 1"
+"Definição da classe Programa para conter os métodos principais"
+Object subclass: Programa [
+    func: v n: n [
+        "Equivalente à função func no código C"
+        | res temp i |
+        
+        "Caso base 1: n <= 0"
+        n <= 0 ifTrue: [
+            ^1.0
+        ].
+        
+        "Caso base 2: n = 1"
         n = 1 ifTrue: [
-            "Acesso a primeira posição do array"
-            point := pontoArray at: 1.
-
-            ^ 1.01
-                + (point x / 1.0e2)
-                + (point y / 0.1e-2)
+            ^1.01 + ((v at: 1) x / 1.0e2) + ((v at: 1) y / 0.1e-2)
         ].
-
-        "Inicializa a variável res com valor double"
+        
+        "Caso recursivo"
         res := 0.25e-13.
-
-        "Representacao de um loop decrescente:"
-        "i = n - 1 ... 0, interrompe se ponto.x <= 0"
+        
+        "Loop while (Nota: índices em Smalltalk começam em 1)"
         i := n.
-
-        [
-            (i >= 1)
-                and: [ (pontoArray at: i) x > 0]
-        ]
-
-        whileTrue: [
-            point := pontoArray at: i.
-
-            "Calcula temp = (y * x) rem 123"
-            temp := (point y * point x) \\ 123.
-
-            temp < 0.0
+        [ i >= 1 ] whileTrue: [
+            ((v at: i) x > 0) 
                 ifTrue: [
-                    res := res - (res * 2.0e-2 + (self func: pontoArray n: n - 1) * temp)
+                    temp := ((v at: i) y * (v at: i) x) \\ 123.
+                    
+                    temp < 0.0
+                        ifTrue: [
+                            res := res - (res * 2.0e-2 + (self func: v n: (n - 1)) * temp)
+                        ]
+                        ifFalse: [
+                            res := res + (res * 0.3e3 + (self func: v n: (n - 2)) * temp).
+                            Transcript show: 'Estranho, ne?'; cr
+                        ].
+                    i := i - 1  "Decrementar o índice"
                 ]
-                ifFalse: [
-                    res := res + (res * 0.3e3 + (self func: pontoArray n: n - 2) * temp).
-                    Transcript show: 'Estranho, ne?'; cr.
-                ].
-
-            i := i - 1.
+                ifFalse: [ ^res ]
         ].
-
+        
         ^res
     ]
+    
+    "Método para testar o programa"
+    executarTeste [
+        | pontos resultado |
+        
+        "Criar array com alguns pontos de teste"
+        pontos := Array new: 3.
+        pontos at: 1 put: (Ponto new x: 10 y: 20).
+        pontos at: 2 put: (Ponto new x: 5 y: 15).
+        pontos at: 3 put: (Ponto new x: 8 y: 25).
+        
+        "Chamar a função"
+        resultado := self func: pontos n: 3.
+        
+        "Mostrar resultado"
+        Transcript show: 'Resultado da função: '; show: resultado printString; cr.
+    ]
 ]
 
-"CÓDIGO DE TESTE"
-Transcript show: 'Programa carregado com sucesso.'; cr.
+"Executar uma demonstração do programa"
+Transcript cr; show: '===== Executando programa ====='; cr.
 
-| p1 p2 p3 pontos resultado |
-p1 := Ponto new.
-p1 x: 10; y: 20.
+"Testar o programa"
+programa := Programa new.
+programa executarTeste.
 
-p2 := Ponto new.
-p2 x: 5; y: 15.
-
-p3 := Ponto new.
-p3 x: 8; y: 12.
-
-"Criar um array com as instâncias de Ponto"
-pontos := Array with: p1 with: p2 with: p3.
-
-"Chamar o método func:n:"
-resultado := Utils func: pontos n: 3.
-
-"Imprimir o resultado"
-Transcript show: 'Resultado: ', resultado printString; cr.
+Transcript cr; show: '===== Fim da execução ====='; cr.
