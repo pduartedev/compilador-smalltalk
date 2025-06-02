@@ -15,8 +15,6 @@ public class SmallTalkLexer {
       System.out.println("Smalltalk Lexical Analyzer: Reading from standard input...");
       lexer = new SmallTalkLexer(System.in);
     } else if (args.length == 1) {
-      System.out.println("Smalltalk Lexical Analyzer: Reading from file " + args[0]);
-      System.out.println("----------------------------------------------------------------");
       try {
         lexer = new SmallTalkLexer(new java.io.FileInputStream(args[0]));
       } catch (java.io.FileNotFoundException e) {
@@ -36,7 +34,7 @@ public class SmallTalkLexer {
     } catch (ParseException e) {
       System.out.println("Syntax Error: " + e.getMessage());
     }
-    System.out.println("----------------------------------------------------------------");
+    System.out.println("$ $");
   }
 }
 
@@ -88,6 +86,9 @@ TOKEN : {
 | < TOKEN_array_begin: "#(" >
 | < TOKEN_left_brace: "{" >
 | < TOKEN_right_brace: "}" >
+
+// ACRÉSCIMOS
+| < TOKEN_subclass: " subclass:">
 
 // 5) Definição dos operadores conforme seção 3.5.5
   // Binary Selector: um ou mais binary characters
@@ -268,8 +269,11 @@ void Start() :
           case SmallTalkLexerConstants.TOKEN_quoted_keyword_selector:
             System.out.println("TOKEN_quoted_keyword_selector " + t.image);
             break;
+          case SmallTalkLexerConstants.TOKEN_subclass:
+            System.out.println("TOKEN_subclass " + t.image);
+            break;
           default:
-            System.out.println("TOKEN_unknown " + t.image);
+            System.out.println("TOKEN_unknown");
         }
       }
     } catch (Exception e) {
