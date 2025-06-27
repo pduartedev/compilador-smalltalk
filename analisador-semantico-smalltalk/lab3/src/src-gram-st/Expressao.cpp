@@ -8,6 +8,7 @@
 #include "ExpressaoSubtracao.hpp"
 #include "ExpressaoVariavel.hpp"
 #include "ExpressaoBoolean.hpp"
+#include "ExpressaoBinaria.hpp"
 #include "ExpressaoFloat.hpp"
 #include "ExpressaoLogica.hpp"
 #include "ExpressaoRelacional.hpp"
@@ -36,8 +37,15 @@ Expressao* Expressao::extrai_expressao(No_arv_parse* no) {
   
   // Basic_Expression -> Primary Message_Sequence (gramática completa)
   if (no->simb == "Basic_Expression") {
-    if (no->filhos.size() >= 1) {
-      // Processa Primary - ignora Message_Sequence por simplicidade na análise semântica
+    if (no->filhos.size() >= 2) {
+      // Processa Primary e Message_Sequence para operações binárias
+      Expressao* primary = extrai_expressao(no->filhos[0]);
+      if (primary != nullptr && no->filhos[1]->simb == "Message_Sequence") {
+        return extrai_message_sequence(primary, no->filhos[1]);
+      }
+      return primary;
+    } else if (no->filhos.size() >= 1) {
+      // Processa apenas Primary se não houver Message_Sequence
       return extrai_expressao(no->filhos[0]);
     }
   }
@@ -193,4 +201,157 @@ void Expressao::debug_com_tab(int tab) {
 
 Tipo* Expressao::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
     return tipo_resultado;
+}
+
+Expressao* Expressao::extrai_message_sequence(Expressao* primary, No_arv_parse* no) {
+  if (no == nullptr || primary == nullptr) return primary;
+  
+  // Message_Sequence -> Message_Chain Cascaded_Messages | ε
+  if (no->simb == "Message_Sequence" && no->filhos.size() > 0) {
+    // Processa o primeiro filho (Message_Chain)
+    return extrai_message_chain(primary, no->filhos[0]);
+  }
+  
+  return primary;
+}
+
+Expressao* Expressao::extrai_message_chain(Expressao* primary, No_arv_parse* no) {
+  if (no == nullptr || primary == nullptr) return primary;
+  
+  // Message_Chain -> Unary_Message_Chain | Binary_Message_Chain | Keyword_Message
+  if (no->simb == "Message_Chain" && no->filhos.size() > 0) {
+    // Por simplicidade, só processamos Binary_Message_Chain
+    if (no->filhos[0]->simb == "Binary_Message_Chain") {
+      return extrai_binary_message_chain(primary, no->filhos[0]);
+    }
+  }
+  
+  return primary;
+}
+
+Expressao* Expressao::extrai_binary_message_chain(Expressao* primary, No_arv_parse* no) {
+  if (no == nullptr || primary == nullptr) return primary;
+  
+  // Binary_Message_Chain -> Binary_Message_List | Binary_Message_List Keyword_Message
+  if (no->simb == "Binary_Message_Chain" && no->filhos.size() > 0) {
+    return extrai_binary_message_list(primary, no->filhos[0]);
+  }
+  
+  return primary;
+}
+
+Expressao* Expressao::extrai_binary_message_list(Expressao* primary, No_arv_parse* no) {
+  if (no == nullptr || primary == nullptr) return primary;
+  
+  // Binary_Message_List -> Binary_Message Binary_Message_List | Binary_Message
+  if (no->simb == "Binary_Message_List" && no->filhos.size() > 0) {
+    // Coleta todas as operações binárias em uma lista
+    vector<pair<string, Expressao*>> operacoes;
+    Expressao* atual = primary;
+    No_arv_parse* lista_atual = no;
+    
+    // Percorre toda a lista de operações binárias
+    while (lista_atual != nullptr && lista_atual->simb == "Binary_Message_List" && lista_atual->filhos.size() > 0) {
+      // Extrai o operador e operando da operação atual
+      string operador = extrai_binary_selector_from_message(lista_atual->filhos[0]);
+      Expressao* operando = extrai_binary_argument_from_message(lista_atual->filhos[0]);
+      
+      if (!operador.empty() && operando != nullptr) {
+        operacoes.push_back(make_pair(operador, operando));
+      }
+      
+      // Avança para a próxima operação na lista
+      if (lista_atual->filhos.size() > 1) {
+        lista_atual = lista_atual->filhos[1];
+      } else {
+        break;
+      }
+    }
+    
+    // Aplica precedência: primeiro multiplicação/divisão, depois adição/subtração
+    return aplica_precedencia_operadores(atual, operacoes);
+  }
+  
+  return primary;
+}
+
+Expressao* Expressao::extrai_binary_message(Expressao* primary, No_arv_parse* no) {
+  if (no == nullptr || primary == nullptr) return primary;
+  
+  // Binary_Message -> Binary_Selector Binary_Argument
+  if (no->simb == "Binary_Message" && no->filhos.size() >= 2) {
+    // Extrai o operador do Binary_Selector
+    string operador = extrai_binary_selector(no->filhos[0]);
+    
+    // Extrai o argumento direito do Binary_Argument
+    Expressao* direita = extrai_binary_argument(no->filhos[1]);
+    
+    if (!operador.empty() && direita != nullptr) {
+      return new ExpressaoBinaria(primary, operador, direita);
+    }
+  }
+  
+  return primary;
+}
+
+string Expressao::extrai_binary_selector(No_arv_parse* no) {
+  if (no == nullptr) return "";
+  
+  // Binary_Selector -> TOKEN_binary_selector
+  if (no->simb == "Binary_Selector" && no->filhos.size() > 0) {
+    if (no->filhos[0]->simb == "TOKEN_binary_selector") {
+      return no->filhos[0]->dado_extra;
+    }
+  }
+  
+  return "";
+}
+
+Expressao* Expressao::extrai_binary_argument(No_arv_parse* no) {
+  if (no == nullptr) return nullptr;
+  
+  // Binary_Argument -> Primary Unary_Message_List | Primary
+  if (no->simb == "Binary_Argument" && no->filhos.size() > 0) {
+    // Por simplicidade, só processa o Primary
+    return extrai_expressao(no->filhos[0]);
+  }
+  
+  return nullptr;
+}
+
+string Expressao::extrai_binary_selector_from_message(No_arv_parse* no) {
+  if (no == nullptr) return "";
+  
+  // Binary_Message -> Binary_Selector Binary_Argument
+  if (no->simb == "Binary_Message" && no->filhos.size() >= 1) {
+    return extrai_binary_selector(no->filhos[0]);
+  }
+  
+  return "";
+}
+
+Expressao* Expressao::extrai_binary_argument_from_message(No_arv_parse* no) {
+  if (no == nullptr) return nullptr;
+  
+  // Binary_Message -> Binary_Selector Binary_Argument
+  if (no->simb == "Binary_Message" && no->filhos.size() >= 2) {
+    return extrai_binary_argument(no->filhos[1]);
+  }
+  
+  return nullptr;
+}
+
+Expressao* Expressao::aplica_precedencia_operadores(Expressao* primary, const vector<pair<string, Expressao*>>& operacoes) {
+  if (operacoes.empty()) {
+    return primary;
+  }
+  
+  // Para Smalltalk, não há precedência de operadores - avalia estritamente da esquerda para a direita
+  Expressao* resultado = primary;
+  
+  for (const auto& operacao : operacoes) {
+    resultado = new ExpressaoBinaria(resultado, operacao.first, operacao.second);
+  }
+  
+  return resultado;
 }

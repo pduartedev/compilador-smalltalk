@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -g
+CXXFLAGS = -std=c++20 -Wall -Wextra -g
 
 # Diretórios
 SRC_DIR = src
@@ -34,6 +34,7 @@ GRAM_SOURCES = $(GRAM_DIR)/Analisador.cpp \
                $(GRAM_DIR)/ExpressaoMultiplicacao.cpp \
                $(GRAM_DIR)/ExpressaoDivisao.cpp \
                $(GRAM_DIR)/ExpressaoMod.cpp \
+               $(GRAM_DIR)/ExpressaoBinaria.cpp \
                $(GRAM_DIR)/Funcao.cpp \
                $(GRAM_DIR)/ID.cpp \
                $(GRAM_DIR)/NUM.cpp \
@@ -59,13 +60,3 @@ $(TARGET): $(ALL_SOURCES) | $(BIN_DIR)
 # Limpar arquivos compilados
 clean:
 	rm -rf $(BIN_DIR)
-
-# Testar com exemplo simples
-test-soma: $(TARGET)
-	cd $(BIN_DIR) && ./analisador ../gramatica-smallTalk/gramatica.conf ../gramatica-smallTalk/tabela_lr1.conf < ../exemplo_soma.st
-
-# Testar com exemplo fibonacci
-test-fibonacci: $(TARGET)
-	cd $(BIN_DIR) && ./analisador ../gramatica-smallTalk/gramatica.conf ../gramatica-smallTalk/tabela_lr1.conf < ../exemplo_fibonacci.st
-
-.PHONY: all clean test-soma test-fibonacci

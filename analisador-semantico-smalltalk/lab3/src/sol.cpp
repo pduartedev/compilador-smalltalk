@@ -13,6 +13,7 @@ using namespace std;
 #include "Arvore.hpp"
 #include "Parser.hpp"
 #include "src-gram-st/Funcao.hpp"
+#include "src-gram-st/ComandoAtribuicao.hpp"
 #include "src-gram-st/Analisador.hpp"
 
 
@@ -90,8 +91,14 @@ int main(int argc, char * argv[]) {
   // Determinar o tipo do resultado baseado no último comando
   Tipo* tipo_resultado = Tipo::INTEGER_TYPE(); // Padrão
   if (!func->comandos.empty()) {
-    // Para simplificar, assumimos INTEGER por padrão
-    // Em uma implementação completa, precisaríamos rastrear o tipo do último valor
+    // Tentar obter o tipo do último comando
+    Comando* ultimo_cmd = func->comandos.back();
+    
+    // Se for uma atribuição, obter o tipo da expressão à direita
+    ComandoAtribuicao* atribuicao = dynamic_cast<ComandoAtribuicao*>(ultimo_cmd);
+    if (atribuicao != nullptr && atribuicao->direita != nullptr && atribuicao->direita->tipo_resultado != nullptr) {
+      tipo_resultado = atribuicao->direita->tipo_resultado;
+    }
   }
   
   ana.imprimir_resultado(resultado, tipo_resultado);

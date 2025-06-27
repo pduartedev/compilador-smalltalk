@@ -1,0 +1,5 @@
+TOKEN_identifier x
+TOKEN_assignment_operator :=
+TOKEN_float 24
+TOKEN_period .
+$ $
