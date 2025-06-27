@@ -9,6 +9,8 @@ public:
   string simb;
   int regra; // -1 = terminal
   string dado_extra;
+  string lexema; // Alias para dado_extra para compatibilidade
+  string simbolo; // Alias para simb para compatibilidade
   vector<No_arv_parse *> filhos;
   No_arv_parse();
   static void debug_no(No_arv_parse * no);

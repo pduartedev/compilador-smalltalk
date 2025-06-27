@@ -10,7 +10,9 @@ public:
   ID * esquerda;
   Expressao * direita;
   ComandoAtribuicao();
-  void debug_com_tab(int tab);
+  void debug_com_tab(int tab) override;
+  bool verificar_tipos_semanticos(vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) override;
+  double executar(map<string, double>& valores_variaveis) override;
 };
 
 #endif

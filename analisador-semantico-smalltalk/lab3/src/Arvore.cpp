@@ -7,6 +7,8 @@ No_arv_parse::No_arv_parse() {
   simb = "";
   regra = -1; //terminal
   dado_extra = "";
+  lexema = dado_extra; // Alias para compatibilidade
+  simbolo = simb; // Alias para compatibilidade
   filhos.clear();
 }
 

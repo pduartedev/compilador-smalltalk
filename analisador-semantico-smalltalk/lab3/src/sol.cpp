@@ -48,14 +48,52 @@ int main(int argc, char * argv[]) {
   cerr << "Parse executado" << endl;
   arv.debug();
   Funcao* func = Funcao::extrai_funcao(arv.raiz);
-  func->debug();
-  // Exemplo de chamada do analisador semantico.
-  vector<int> parametros_passados;
-  for (int i = 1; i <= 3; ++i) {
-    parametros_passados.push_back(i*10);
+  
+  if (func == nullptr) {
+    cerr << "Erro: Não foi possível extrair a função da árvore de parse" << endl;
+    return 1;
   }
+  
+  func->debug();
+  
+  // Executar análise semântica
   Analisador ana;
-  cout << "Ultimo valor calculado:" << endl;
-  cout << ana.calcula_ultimo_valor(func, parametros_passados) << endl;
+  if (!ana.verificar_semantica(func)) {
+    cerr << "Erro na análise semântica. Programa não pode ser executado." << endl;
+    return 1;
+  }
+  
+  cerr << "Análise semântica concluída com sucesso!" << endl;
+  
+  // Exemplo de chamada do analisador semantico com parâmetros de exemplo
+  vector<double> parametros_passados;
+  
+  // Solicitar parâmetros ao usuário ou usar valores padrão
+  if (func->parametros.size() > 0) {
+    cout << "Digite os valores dos parâmetros (ou pressione Enter para usar valores padrão):" << endl;
+    for (size_t i = 0; i < func->parametros.size(); i++) {
+      cout << "Parâmetro " << func->parametros[i]->nome->nome << " (" 
+           << func->parametros[i]->tipo->nome << "): ";
+      string input;
+      getline(cin, input);
+      if (input.empty()) {
+        parametros_passados.push_back(i + 1); // Valor padrão
+      } else {
+        parametros_passados.push_back(stod(input));
+      }
+    }
+  }
+  
+  cout << "Ultimo valor calculado: ";
+  double resultado = ana.calcula_ultimo_valor(func, parametros_passados);
+  
+  // Determinar o tipo do resultado baseado no último comando
+  Tipo* tipo_resultado = Tipo::INTEGER_TYPE(); // Padrão
+  if (!func->comandos.empty()) {
+    // Para simplificar, assumimos INTEGER por padrão
+    // Em uma implementação completa, precisaríamos rastrear o tipo do último valor
+  }
+  
+  ana.imprimir_resultado(resultado, tipo_resultado);
   return 0;
 }

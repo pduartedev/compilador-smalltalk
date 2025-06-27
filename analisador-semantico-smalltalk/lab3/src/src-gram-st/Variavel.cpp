@@ -1,5 +1,6 @@
 #include "Variavel.hpp"
 #include "ID.hpp"
+#include "Tipo.hpp"
 #include <iostream>
 #include "../debug-util.hpp"
 
@@ -40,7 +41,23 @@ Variavel* Variavel::extrai_variavel_P(No_arv_parse* no) {
   // 11) P -> ID ID
   res->tipo = ID::extrai_ID(no->filhos[0]);
   res->nome = ID::extrai_ID(no->filhos[1]);
+  res->tipo_semantico = res->inferir_tipo_semantico();
   return res;
+}
+
+Tipo* Variavel::inferir_tipo_semantico() {
+  if (tipo == nullptr) return Tipo::OBJECT_TYPE();
+  
+  string tipo_str = tipo->nome;
+  if (tipo_str == "Integer" || tipo_str == "int") {
+    return Tipo::INTEGER_TYPE();
+  } else if (tipo_str == "Float" || tipo_str == "float") {
+    return Tipo::FLOAT_TYPE();
+  } else if (tipo_str == "Boolean" || tipo_str == "bool") {
+    return Tipo::BOOLEAN_TYPE();
+  } else {
+    return Tipo::OBJECT_TYPE();
+  }
 }
 
 void Variavel::debug_com_tab(int tab) {

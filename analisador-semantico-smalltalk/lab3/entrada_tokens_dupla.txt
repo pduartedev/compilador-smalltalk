@@ -1,0 +1,9 @@
+TOKEN_identifier a
+TOKEN_assignment_operator :=
+TOKEN_decimal_integer 10
+TOKEN_period .
+TOKEN_identifier b
+TOKEN_assignment_operator :=
+TOKEN_decimal_integer 20
+TOKEN_period .
+$ $
