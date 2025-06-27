@@ -2,6 +2,7 @@
 #define _ANALISADOR_HPP_
 #include "Funcao.hpp"
 #include <vector>
+#include <map>
 using namespace std;
 
 class Analisador {
