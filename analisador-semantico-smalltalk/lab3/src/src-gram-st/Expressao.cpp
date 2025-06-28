@@ -292,7 +292,18 @@ Expressao* Expressao::extrai_binary_message(Expressao* primary, No_arv_parse* no
     Expressao* direita = extrai_binary_argument(no->filhos[1]);
     
     if (!operador.empty() && direita != nullptr) {
-      return new ExpressaoBinaria(primary, operador, direita);
+      // Debug: imprimir operador detectado
+      cerr << "DEBUG: Operador detectado: '" << operador << "'" << endl;
+      
+      // Verificar se é operador relacional
+      if (operador == "<" || operador == ">" || operador == "==" || 
+          operador == "<=" || operador == ">=" || operador == "!=") {
+        cerr << "DEBUG: Criando ExpressaoRelacional para: " << operador << endl;
+        return new ExpressaoRelacional(primary, direita, operador);
+      } else {
+        cerr << "DEBUG: Criando ExpressaoBinaria para: " << operador << endl;
+        return new ExpressaoBinaria(primary, operador, direita);
+      }
     }
   }
   
@@ -355,7 +366,16 @@ Expressao* Expressao::aplica_precedencia_operadores(Expressao* primary, const ve
   Expressao* resultado = primary;
   
   for (const auto& operacao : operacoes) {
-    resultado = new ExpressaoBinaria(resultado, operacao.first, operacao.second);
+    string operador = operacao.first;
+    Expressao* direita = operacao.second;
+    
+    // Verificar se é operador relacional
+    if (operador == "<" || operador == ">" || operador == "==" || 
+        operador == "<=" || operador == ">=" || operador == "!=") {
+      resultado = new ExpressaoRelacional(resultado, direita, operador);
+    } else {
+      resultado = new ExpressaoBinaria(resultado, operador, direita);
+    }
   }
   
   return resultado;
