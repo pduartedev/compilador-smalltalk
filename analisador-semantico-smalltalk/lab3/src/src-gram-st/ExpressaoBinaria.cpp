@@ -44,6 +44,12 @@ Tipo* ExpressaoBinaria::verificar_tipos(const vector<Variavel*>& variaveis, cons
       tipo_resultado = Tipo::FLOAT_TYPE();
     } else if ((tipo_esq && tipo_esq->nome == "Integer") && (tipo_dir && tipo_dir->nome == "Integer")) {
       tipo_resultado = Tipo::INTEGER_TYPE();
+    } else if ((tipo_esq && tipo_esq->nome == "Object") || (tipo_dir && tipo_dir->nome == "Object")) {
+      // Para operações com Object, assumir que retorna Object (pode ser subclassificado posteriormente)
+      tipo_resultado = Tipo::OBJECT_TYPE();
+    } else if ((tipo_esq && tipo_esq->nome == "UNDEFINED") || (tipo_dir && tipo_dir->nome == "UNDEFINED")) {
+      // Para operações com UNDEFINED, assumir que retorna Object (será refinado posteriormente)
+      tipo_resultado = Tipo::OBJECT_TYPE();
     } else {
       return nullptr;
     }
