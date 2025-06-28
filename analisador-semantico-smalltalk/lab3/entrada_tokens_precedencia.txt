@@ -1,0 +1,7 @@
+TOKEN_identifier x
+TOKEN_assignment_operator :=
+TOKEN_decimal_integer 2
+TOKEN_binary_selector *
+TOKEN_decimal_integer 3
+TOKEN_period .
+$ $

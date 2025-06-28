@@ -8,6 +8,7 @@
 #include "ExpressaoSubtracao.hpp"
 #include "ExpressaoVariavel.hpp"
 #include "ExpressaoBoolean.hpp"
+#include "ExpressaoSelf.hpp"
 #include "ExpressaoBinaria.hpp"
 #include "ExpressaoFloat.hpp"
 #include "ExpressaoLogica.hpp"
@@ -104,8 +105,12 @@ Expressao* Expressao::extrai_primary(No_arv_parse* no) {
     return new ExpressaoInt(0);
   }
   
-  // TOKEN_self, TOKEN_super (gramática completa - ignorados por simplicidade)
-  if (no->simb == "TOKEN_self" || no->simb == "TOKEN_super") {
+  // TOKEN_self, TOKEN_super (gramática completa)
+  if (no->simb == "TOKEN_self") {
+    return new ExpressaoSelf();
+  }
+  
+  if (no->simb == "TOKEN_super") {
     // Por simplicidade, retorna nil
     return new ExpressaoInt(0);
   }

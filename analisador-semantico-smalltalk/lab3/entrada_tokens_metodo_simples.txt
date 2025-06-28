@@ -1,0 +1,11 @@
+TOKEN_identifier MinhaClasse
+TOKEN_subclass subclass:
+TOKEN_identifier Object
+TOKEN_left_bracket
+TOKEN_identifier getValue
+TOKEN_left_bracket
+TOKEN_return_operator ^
+TOKEN_decimal_integer 42
+TOKEN_right_bracket
+TOKEN_right_bracket
+$ $

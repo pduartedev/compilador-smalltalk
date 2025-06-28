@@ -35,6 +35,7 @@ GRAM_SOURCES = $(GRAM_DIR)/Analisador.cpp \
                $(GRAM_DIR)/ExpressaoDivisao.cpp \
                $(GRAM_DIR)/ExpressaoMod.cpp \
                $(GRAM_DIR)/ExpressaoBinaria.cpp \
+               $(GRAM_DIR)/ExpressaoSelf.cpp \
                $(GRAM_DIR)/Funcao.cpp \
                $(GRAM_DIR)/ID.cpp \
                $(GRAM_DIR)/NUM.cpp \

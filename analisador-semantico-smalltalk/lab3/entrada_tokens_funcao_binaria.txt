@@ -1,0 +1,16 @@
+TOKEN_binary_selector +
+TOKEN_identifier valor
+TOKEN_left_bracket
+TOKEN_pipe
+TOKEN_identifier resultado
+TOKEN_pipe
+TOKEN_identifier resultado
+TOKEN_assignment_operator :=
+TOKEN_identifier self
+TOKEN_binary_selector +
+TOKEN_identifier valor
+TOKEN_period
+TOKEN_return_operator ^
+TOKEN_identifier resultado
+TOKEN_right_bracket
+$ $

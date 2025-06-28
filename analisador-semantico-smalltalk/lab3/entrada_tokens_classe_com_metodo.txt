@@ -1,0 +1,17 @@
+TOKEN_identifier MinhaClasse
+TOKEN_subclass subclass:
+TOKEN_identifier Object
+TOKEN_left_bracket
+TOKEN_identifier simpleMethod
+TOKEN_left_bracket
+TOKEN_identifier resultado
+TOKEN_assignment_operator :=
+TOKEN_decimal_integer 10
+TOKEN_binary_selector +
+TOKEN_decimal_integer 5
+TOKEN_period
+TOKEN_return_operator ^
+TOKEN_identifier resultado
+TOKEN_right_bracket
+TOKEN_right_bracket
+$ $
