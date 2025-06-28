@@ -41,12 +41,13 @@ int main(int argc, char * argv[]) {
     return 1;    
   }
   Parser parser(arq_gramatica, arq_tabela_lr1);
-  // parser.tabela.debug();
-  // parser.gram.debug();
+  parser.tabela.debug();
+  parser.gram.debug();
 
   
   Arvore_parse arv = parser.executa_parse(cin);
-  // arv.debug();
+  cerr << "Parse executado" << endl;
+  arv.debug();
   Funcao* func = Funcao::extrai_funcao(arv.raiz);
   
   if (func == nullptr) {
@@ -54,7 +55,7 @@ int main(int argc, char * argv[]) {
     return 1;
   }
   
-  // func->debug();
+  func->debug();
   
   // Executar análise semântica
   Analisador ana;
@@ -63,12 +64,25 @@ int main(int argc, char * argv[]) {
     return 1;
   }
   
-  // cerr << "Análise semântica concluída com sucesso!" << endl;
+  cerr << "Análise semântica concluída com sucesso!" << endl;
   
-  // Para análise semântica, usar valores padrão para os parâmetros
+  // Exemplo de chamada do analisador semantico com parâmetros de exemplo
   vector<double> parametros_passados;
-  for (size_t i = 0; i < func->parametros.size(); i++) {
-    parametros_passados.push_back(i + 1); // Valores padrão: 1, 2, 3, ...
+  
+  // Solicitar parâmetros ao usuário ou usar valores padrão
+  if (func->parametros.size() > 0) {
+    cout << "Digite os valores dos parâmetros (ou pressione Enter para usar valores padrão):" << endl;
+    for (size_t i = 0; i < func->parametros.size(); i++) {
+      cout << "Parâmetro " << func->parametros[i]->nome->nome << " (" 
+           << func->parametros[i]->tipo->nome << "): ";
+      string input;
+      getline(cin, input);
+      if (input.empty()) {
+        parametros_passados.push_back(i + 1); // Valor padrão
+      } else {
+        parametros_passados.push_back(stod(input));
+      }
+    }
   }
   
   cout << "Ultimo valor calculado: ";

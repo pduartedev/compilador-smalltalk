@@ -133,8 +133,8 @@ valor [
 
 2. **Executar com um programa**:
    ```bash
-   cd lab3
-   bin/analisador gramatica-st/gramatica.conf gramatica-st/tabela_lr1.conf < entrada_tokens_exemplo.txt
+   cd bin
+   ./analisador ../gramatica-smallTalk/gramatica.conf ../gramatica-smallTalk/tabela_lr1.conf < ../exemplo_metodo.st
    ```
 
 ## Saída

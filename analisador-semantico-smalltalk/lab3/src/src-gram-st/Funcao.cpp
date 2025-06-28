@@ -12,10 +12,6 @@ Funcao* Funcao::extrai_funcao(No_arv_parse *no) {
   // Primeiro tenta encontrar Method_Definition na árvore
   Funcao* metodo = extrai_funcao_recursivo(no);
   if (metodo != nullptr) {
-    // Extrair variáveis de instância da classe e adicioná-las ao método
-    vector<Variavel*> variaveis_instancia = extrai_variaveis_instancia(no);
-    // Adicionar variáveis de instância no início da lista de variáveis do método
-    metodo->variaveis.insert(metodo->variaveis.begin(), variaveis_instancia.begin(), variaveis_instancia.end());
     return metodo;
   }
   
@@ -463,33 +459,4 @@ void Funcao::buscar_statements_nivel_superior(No_arv_parse *no, vector<Comando*>
   for (auto filho : no->filhos) {
     buscar_statements_nivel_superior(filho, comandos);
   }
-}
-
-vector<Variavel*> Funcao::extrai_variaveis_instancia(No_arv_parse *no) {
-  vector<Variavel*> variaveis_instancia;
-  
-  if (no == nullptr) return variaveis_instancia;
-  
-  // Procurar por Class_Definition -> ... -> Class_Body -> Temporaries
-  if (no->simb == "Class_Definition") {
-    // Class_Definition -> TOKEN_identifier TOKEN_subclass TOKEN_identifier TOKEN_left_bracket Class_Body TOKEN_right_bracket
-    if (no->filhos.size() >= 5 && no->filhos[4]->simb == "Class_Body") {
-      No_arv_parse* class_body = no->filhos[4];
-      // Class_Body -> Temporaries Method_Definitions | Method_Definitions
-      if (class_body->filhos.size() > 0 && class_body->filhos[0]->simb == "Temporaries") {
-        variaveis_instancia = extrai_temporaries(class_body->filhos[0]);
-      }
-    }
-    return variaveis_instancia;
-  }
-  
-  // Buscar recursivamente nos filhos
-  for (auto filho : no->filhos) {
-    vector<Variavel*> encontradas = extrai_variaveis_instancia(filho);
-    if (!encontradas.empty()) {
-      return encontradas; // Retorna as primeiras encontradas
-    }
-  }
-  
-  return variaveis_instancia;
 }
