@@ -1,0 +1,46 @@
+TOKEN_identifier TesteComplexo
+TOKEN_subclass subclass:
+TOKEN_identifier Object
+TOKEN_left_bracket
+TOKEN_identifier metodoComplexo
+TOKEN_left_bracket
+TOKEN_pipe |
+TOKEN_identifier a
+TOKEN_identifier b
+TOKEN_identifier c
+TOKEN_identifier resultado
+TOKEN_identifier flag
+TOKEN_pipe |
+TOKEN_identifier a
+TOKEN_assignment_operator :=
+TOKEN_decimal_integer 10
+TOKEN_period .
+TOKEN_identifier b
+TOKEN_assignment_operator :=
+TOKEN_decimal_integer 20
+TOKEN_period .
+TOKEN_identifier c
+TOKEN_assignment_operator :=
+TOKEN_identifier a
+TOKEN_binary_selector +
+TOKEN_identifier b
+TOKEN_period .
+TOKEN_identifier resultado
+TOKEN_assignment_operator :=
+TOKEN_identifier c
+TOKEN_binary_selector *
+TOKEN_decimal_integer 2
+TOKEN_period .
+TOKEN_identifier flag
+TOKEN_assignment_operator :=
+TOKEN_true true
+TOKEN_period .
+TOKEN_identifier flag
+TOKEN_assignment_operator :=
+TOKEN_false false
+TOKEN_period .
+TOKEN_return_operator ^
+TOKEN_identifier resultado
+TOKEN_right_bracket
+TOKEN_right_bracket
+$ $
