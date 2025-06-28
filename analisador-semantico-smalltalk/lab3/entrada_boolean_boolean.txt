@@ -1,0 +1,7 @@
+TOKEN_identifier resultado
+TOKEN_assignment_operator :=
+TOKEN_true true
+TOKEN_binary_selector +
+TOKEN_false false
+TOKEN_period .
+$ $

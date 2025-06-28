@@ -1,0 +1,9 @@
+TOKEN_identifier resultado
+TOKEN_assignment_operator :=
+TOKEN_float 10.5
+TOKEN_binary_selector +
+TOKEN_float 2.3
+TOKEN_binary_selector -
+TOKEN_float 1.8
+TOKEN_period .
+$ $

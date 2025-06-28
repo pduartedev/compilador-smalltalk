@@ -1,0 +1,7 @@
+TOKEN_identifier teste
+TOKEN_assignment_operator :=
+TOKEN_false false
+TOKEN_binary_selector +
+TOKEN_decimal_integer 42
+TOKEN_period .
+$ $

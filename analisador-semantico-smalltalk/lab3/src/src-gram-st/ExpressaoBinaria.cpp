@@ -38,16 +38,28 @@ Tipo* ExpressaoBinaria::verificar_tipos(const vector<Variavel*>& variaveis, cons
   Tipo* tipo_esq = esquerda->verificar_tipos(variaveis, parametros);
   Tipo* tipo_dir = direita->verificar_tipos(variaveis, parametros);
   
-  // Regras de tipo para operações binárias
+  // Regras de tipo para operações binárias - Smalltalk é fortemente tipado
   if (operador == "+" || operador == "-" || operador == "*" || operador == "/" || operador == "%") {
-    if ((tipo_esq && tipo_esq->nome == "Float") || (tipo_dir && tipo_dir->nome == "Float")) {
+    // Verifica se ambos os tipos são válidos
+    if (!tipo_esq || !tipo_dir) {
+      cerr << "Erro semântico: Tipos inválidos na operação " << operador << endl;
+      return nullptr;
+    }
+    
+    // Operações só são permitidas entre tipos idênticos
+    if ((tipo_esq->nome == "Float") && (tipo_dir->nome == "Float")) {
       tipo_resultado = Tipo::FLOAT_TYPE();
-    } else if ((tipo_esq && tipo_esq->nome == "Integer") && (tipo_dir && tipo_dir->nome == "Integer")) {
+    } else if ((tipo_esq->nome == "Integer") && (tipo_dir->nome == "Integer")) {
       tipo_resultado = Tipo::INTEGER_TYPE();
     } else {
+      // Rejeitar mistura de tipos - Smalltalk é fortemente tipado
+      cerr << "Erro semântico: Operação entre tipos incompatíveis - " 
+           << tipo_esq->nome << " " << operador << " " << tipo_dir->nome << endl;
+      cerr << "Smalltalk não permite conversão automática de tipos." << endl;
       return nullptr;
     }
   } else {
+    cerr << "Erro semântico: Operador '" << operador << "' não reconhecido" << endl;
     return nullptr;
   }
   
