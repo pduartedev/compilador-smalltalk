@@ -25,6 +25,7 @@ public:
   static Expressao* extrai_binary_message_chain(Expressao* primary, No_arv_parse* no);
   static Expressao* extrai_binary_message_list(Expressao* primary, No_arv_parse* no);
   static Expressao* extrai_binary_message(Expressao* primary, No_arv_parse* no);
+  static Expressao* extrai_keyword_message(Expressao* primary, No_arv_parse* no);
   static string extrai_binary_selector(No_arv_parse* no);
   static Expressao* extrai_binary_argument(No_arv_parse* no);
   static string extrai_binary_selector_from_message(No_arv_parse* no);

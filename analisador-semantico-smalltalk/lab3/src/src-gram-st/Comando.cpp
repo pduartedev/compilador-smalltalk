@@ -74,11 +74,19 @@ Comando* Comando::extrai_comando_de_expression(No_arv_parse* no) {
       }
       return cmd;
     }
-    // Basic_Expression - por simplicidade, não gera comando
+    
+    // Basic_Expression - tratar como comando de expressão
+    if (filho->simb == "Basic_Expression") {
+      // Criar um comando de atribuição temporário para expressões simples
+      ComandoAtribuicao* cmd = new ComandoAtribuicao();
+      cmd->esquerda = new ID();
+      cmd->esquerda->nome = "__temp__"; // Variável temporária para resultado da expressão
+      cmd->direita = Expressao::extrai_expressao(filho);
+      return cmd;
+    }
   }
   
-  // Se for Basic_Expression, pode conter mensagens que são comandos
-  // Por simplicidade, ignoramos por enquanto
+  // Se não conseguir extrair nenhum comando, retorna nullptr
   return nullptr;
 }
 
@@ -114,21 +122,35 @@ void Comando::extrai_block_content(No_arv_parse* no, ComandoLista* cmd) {
 vector<Comando*> Comando::extrai_block_statements(No_arv_parse* no) {
   vector<Comando*> comandos;
   
-  if (no == nullptr) return comandos;
+  if (no == nullptr) {
+    cerr << "DEBUG: extrai_block_statements - no é nullptr" << endl;
+    return comandos;
+  }
+  
+  cerr << "DEBUG: extrai_block_statements - processando " << no->simb << endl;
   
   if (no->simb == "Block_Statements") {
+    cerr << "DEBUG: Block_Statements encontrado com " << no->filhos.size() << " filhos" << endl;
     // Block_Statements -> Statement Block_Statement_List
     if (no->filhos.size() >= 1) {
+      cerr << "DEBUG: Processando Statement filho[0]: " << no->filhos[0]->simb << endl;
       Comando* cmd = Funcao::extrai_statement(no->filhos[0]);
       if (cmd != nullptr) {
+        cerr << "DEBUG: Comando extraído com sucesso!" << endl;
         comandos.push_back(cmd);
+      } else {
+        cerr << "DEBUG: Funcao::extrai_statement retornou nullptr" << endl;
       }
       
       if (no->filhos.size() >= 2) {
+        cerr << "DEBUG: Processando Block_Statement_List filho[1]: " << no->filhos[1]->simb << endl;
         vector<Comando*> resto = Comando::extrai_block_statement_list(no->filhos[1]);
+        cerr << "DEBUG: extrai_block_statement_list retornou " << resto.size() << " comandos" << endl;
         comandos.insert(comandos.end(), resto.begin(), resto.end());
       }
     }
+  } else {
+    cerr << "DEBUG: Nó não é Block_Statements, é: " << no->simb << endl;
   }
   
   return comandos;

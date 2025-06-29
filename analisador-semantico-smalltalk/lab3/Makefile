@@ -27,6 +27,7 @@ GRAM_SOURCES = $(GRAM_DIR)/Analisador.cpp \
                $(GRAM_DIR)/ExpressaoInt.cpp \
                $(GRAM_DIR)/ExpressaoLogica.cpp \
                $(GRAM_DIR)/ExpressaoRelacional.cpp \
+               $(GRAM_DIR)/ExpressaoCondicional.cpp \
                $(GRAM_DIR)/ExpressaoNumero.cpp \
                $(GRAM_DIR)/ExpressaoVariavel.cpp \
                $(GRAM_DIR)/ExpressaoSoma.cpp \

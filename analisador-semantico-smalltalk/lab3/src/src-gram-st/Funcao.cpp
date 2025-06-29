@@ -12,6 +12,14 @@ Funcao* Funcao::extrai_funcao(No_arv_parse *no) {
   // Primeiro tenta encontrar Method_Definition na árvore
   Funcao* metodo = extrai_funcao_recursivo(no);
   if (metodo != nullptr) {
+    // Incluir variáveis de instância da classe no método
+    vector<Variavel*> variaveis_instancia = extrai_variaveis_instancia(no);
+    
+    // Adicionar variáveis de instância antes das variáveis locais/temporárias
+    vector<Variavel*> todas_variaveis = variaveis_instancia;
+    todas_variaveis.insert(todas_variaveis.end(), metodo->variaveis.begin(), metodo->variaveis.end());
+    metodo->variaveis = todas_variaveis;
+    
     return metodo;
   }
   
@@ -333,18 +341,32 @@ vector<Comando*> Funcao::extrai_statements(No_arv_parse *no) {
 }
 
 Comando* Funcao::extrai_statement(No_arv_parse *no) {
-  if (no == nullptr) return nullptr;
+  if (no == nullptr) {
+    cerr << "DEBUG: Funcao::extrai_statement - no é nullptr" << endl;
+    return nullptr;
+  }
+  
+  cerr << "DEBUG: Funcao::extrai_statement - processando " << no->simb << " com " << no->filhos.size() << " filhos" << endl;
   
   if (no->simb == "Statement") {
     // Statement pode ser Return_Statement ou Expression
     if (no->filhos.size() > 0) {
+      cerr << "DEBUG: Statement filho[0]: " << no->filhos[0]->simb << endl;
       if (no->filhos[0]->simb == "Return_Statement") {
+        cerr << "DEBUG: Processando Return_Statement" << endl;
         // Por simplicidade, tratar return como atribuição para uma variável especial
         return Funcao::extrai_return_statement(no->filhos[0]);
       } else if (no->filhos[0]->simb == "Expression") {
+        cerr << "DEBUG: Processando Expression" << endl;
         return Funcao::extrai_expression_command(no->filhos[0]);
+      } else {
+        cerr << "DEBUG: Statement filho[0] não é Return_Statement nem Expression: " << no->filhos[0]->simb << endl;
       }
+    } else {
+      cerr << "DEBUG: Statement não tem filhos" << endl;
     }
+  } else {
+    cerr << "DEBUG: Nó não é Statement: " << no->simb << endl;
   }
   
   return nullptr;
@@ -365,8 +387,16 @@ Comando* Funcao::extrai_return_statement(No_arv_parse *no) {
 Comando* Funcao::extrai_expression_command(No_arv_parse *no) {
   // Por simplicidade, assumir que é uma atribuição
   if (no != nullptr && no->simb == "Expression") {
-    return Comando::extrai_comando(no);
+    cerr << "DEBUG: extrai_expression_command - chamando Comando::extrai_comando" << endl;
+    Comando* resultado = Comando::extrai_comando(no);
+    if (resultado == nullptr) {
+      cerr << "DEBUG: Comando::extrai_comando retornou nullptr" << endl;
+    } else {
+      cerr << "DEBUG: Comando::extrai_comando retornou comando válido" << endl;
+    }
+    return resultado;
   }
+  cerr << "DEBUG: extrai_expression_command - nó não é Expression ou é nullptr" << endl;
   return nullptr;
 }
 
@@ -483,4 +513,48 @@ void Funcao::buscar_statements_nivel_superior(No_arv_parse *no, vector<Comando*>
   for (auto filho : no->filhos) {
     buscar_statements_nivel_superior(filho, comandos);
   }
+}
+
+// Nova função para extrair variáveis de instância da classe
+vector<Variavel*> Funcao::extrai_variaveis_instancia(No_arv_parse *no_raiz) {
+  vector<Variavel*> variaveis_instancia;
+  
+  if (no_raiz == nullptr) return variaveis_instancia;
+  
+  // Buscar Class_Definition -> TOKEN_identifier TOKEN_subclass TOKEN_identifier TOKEN_left_bracket Class_Body TOKEN_right_bracket
+  No_arv_parse* class_definition = buscar_no_por_simbolo(no_raiz, "Class_Definition");
+  if (class_definition == nullptr) return variaveis_instancia;
+  
+  // Verificar se tem pelo menos 5 filhos para acessar Class_Body
+  if (class_definition->filhos.size() < 5) return variaveis_instancia;
+  
+  No_arv_parse* class_body = class_definition->filhos[4]; // Class_Body
+  if (class_body == nullptr || class_body->simb != "Class_Body") return variaveis_instancia;
+  
+  // Class_Body -> Temporaries Method_Definitions | Method_Definitions
+  // Se o primeiro filho é Temporaries, são as variáveis de instância
+  if (class_body->filhos.size() > 0 && class_body->filhos[0]->simb == "Temporaries") {
+    variaveis_instancia = extrai_temporaries(class_body->filhos[0]);
+  }
+  
+  return variaveis_instancia;
+}
+
+// Função auxiliar para buscar um nó por símbolo na árvore
+No_arv_parse* Funcao::buscar_no_por_simbolo(No_arv_parse *no, const string& simbolo) {
+  if (no == nullptr) return nullptr;
+  
+  if (no->simb == simbolo) {
+    return no;
+  }
+  
+  // Buscar recursivamente nos filhos
+  for (auto filho : no->filhos) {
+    No_arv_parse* resultado = buscar_no_por_simbolo(filho, simbolo);
+    if (resultado != nullptr) {
+      return resultado;
+    }
+  }
+  
+  return nullptr;
 }

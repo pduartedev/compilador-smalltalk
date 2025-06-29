@@ -27,6 +27,8 @@ public:
   static void extrai_keyword_pattern_elementos(No_arv_parse *no, Funcao* func, string& nome_completo);
   static vector<Variavel*> extrai_temporaries(No_arv_parse *no);
   static vector<Variavel*> extrai_variable_list(No_arv_parse *no);
+  static vector<Variavel*> extrai_variaveis_instancia(No_arv_parse *no_raiz);
+  static No_arv_parse* buscar_no_por_simbolo(No_arv_parse *no, const string& simbolo);
   static vector<Comando*> extrai_statements(No_arv_parse *no);
   static Comando* extrai_statement(No_arv_parse *no);
   static Comando* extrai_return_statement(No_arv_parse *no);

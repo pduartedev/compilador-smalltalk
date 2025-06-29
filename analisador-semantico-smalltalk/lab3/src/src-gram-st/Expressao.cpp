@@ -13,6 +13,7 @@
 #include "ExpressaoFloat.hpp"
 #include "ExpressaoLogica.hpp"
 #include "ExpressaoRelacional.hpp"
+#include "ExpressaoCondicional.hpp"
 #include "Variavel.hpp"
 #include <iostream>
 #include "../debug-util.hpp"
@@ -236,6 +237,8 @@ Expressao* Expressao::extrai_message_chain(Expressao* primary, No_arv_parse* no)
       return extrai_unary_message_chain(primary, no->filhos[0]);
     } else if (no->filhos[0]->simb == "Binary_Message_Chain") {
       return extrai_binary_message_chain(primary, no->filhos[0]);
+    } else if (no->filhos[0]->simb == "Keyword_Message") {
+      return extrai_keyword_message(primary, no->filhos[0]);
     }
   }
   
@@ -247,7 +250,14 @@ Expressao* Expressao::extrai_binary_message_chain(Expressao* primary, No_arv_par
   
   // Binary_Message_Chain -> Binary_Message_List | Binary_Message_List Keyword_Message
   if (no->simb == "Binary_Message_Chain" && no->filhos.size() > 0) {
-    return extrai_binary_message_list(primary, no->filhos[0]);
+    Expressao* resultado = extrai_binary_message_list(primary, no->filhos[0]);
+    
+    // Se há uma Keyword_Message após Binary_Message_List
+    if (no->filhos.size() > 1 && no->filhos[1]->simb == "Keyword_Message") {
+      resultado = extrai_keyword_message(resultado, no->filhos[1]);
+    }
+    
+    return resultado;
   }
   
   return primary;
@@ -394,8 +404,9 @@ Expressao* Expressao::extrai_unary_message_chain(Expressao* primary, No_arv_pars
     if (no->filhos.size() > 1) {
       if (no->filhos[1]->simb == "Binary_Message_Chain") {
         resultado = extrai_binary_message_chain(resultado, no->filhos[1]);
+      } else if (no->filhos[1]->simb == "Keyword_Message") {
+        resultado = extrai_keyword_message(resultado, no->filhos[1]);
       }
-      // Aqui poderia adicionar suporte a Keyword_Message se necessário
     }
     
     return resultado;
@@ -444,4 +455,17 @@ string Expressao::extrai_unary_message(No_arv_parse* no) {
   }
   
   return "";
+}
+
+Expressao* Expressao::extrai_keyword_message(Expressao* primary, No_arv_parse* no) {
+  if (no == nullptr || primary == nullptr) return primary;
+  
+  // Primeiro, verifica se é uma expressão condicional (ifTrue:/ifFalse:)
+  ExpressaoCondicional* condicional = ExpressaoCondicional::extrai_condicional(primary, no);
+  if (condicional != nullptr) {
+    return condicional;
+  }
+  
+  // Para outras mensagens keyword, retorna a expressão original por enquanto
+  return primary;
 }
