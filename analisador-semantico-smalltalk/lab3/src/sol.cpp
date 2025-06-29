@@ -69,20 +69,9 @@ int main(int argc, char * argv[]) {
   // Exemplo de chamada do analisador semantico com parâmetros de exemplo
   vector<double> parametros_passados;
   
-  // Solicitar parâmetros ao usuário ou usar valores padrão
-  if (func->parametros.size() > 0) {
-    cout << "Digite os valores dos parâmetros (ou pressione Enter para usar valores padrão):" << endl;
-    for (size_t i = 0; i < func->parametros.size(); i++) {
-      cout << "Parâmetro " << func->parametros[i]->nome->nome << " (" 
-           << func->parametros[i]->tipo->nome << "): ";
-      string input;
-      getline(cin, input);
-      if (input.empty()) {
-        parametros_passados.push_back(i + 1); // Valor padrão
-      } else {
-        parametros_passados.push_back(stod(input));
-      }
-    }
+  // Usar valores padrão para parâmetros (se existirem)
+  for (size_t i = 0; i < func->parametros.size(); i++) {
+    parametros_passados.push_back(i + 1); // Valor padrão
   }
   
   cout << "Ultimo valor calculado: ";
@@ -93,13 +82,25 @@ int main(int argc, char * argv[]) {
   if (!func->comandos.empty()) {
     // Tentar obter o tipo do último comando
     Comando* ultimo_cmd = func->comandos.back();
+    cerr << "DEBUG: Tipo do último comando: " << typeid(*ultimo_cmd).name() << endl;
     
     // Se for uma atribuição, obter o tipo da expressão à direita
     ComandoAtribuicao* atribuicao = dynamic_cast<ComandoAtribuicao*>(ultimo_cmd);
-    if (atribuicao != nullptr && atribuicao->direita != nullptr && atribuicao->direita->tipo_resultado != nullptr) {
-      tipo_resultado = atribuicao->direita->tipo_resultado;
+    if (atribuicao != nullptr) {
+      cerr << "DEBUG: É uma atribuição para variável: " << (atribuicao->esquerda ? atribuicao->esquerda->nome : "NULL") << endl;
+      if (atribuicao->direita != nullptr && atribuicao->direita->tipo_resultado != nullptr) {
+        cerr << "DEBUG: Tipo da expressão à direita: " << (int)atribuicao->direita->tipo_resultado->tipo << endl;
+        tipo_resultado = atribuicao->direita->tipo_resultado;
+        
+        // Verificar se é especificamente o comando de return (atribuição à variável __return__)
+        if (atribuicao->esquerda != nullptr && atribuicao->esquerda->nome == "__return__") {
+          cerr << "DEBUG: Detectado comando de return!" << endl;
+          tipo_resultado = atribuicao->direita->tipo_resultado;
+        }
+      }
     }
   }
+  cerr << "DEBUG: Tipo final determinado: " << (int)tipo_resultado->tipo << endl;
   
   ana.imprimir_resultado(resultado, tipo_resultado);
   return 0;

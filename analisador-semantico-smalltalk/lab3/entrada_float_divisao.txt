@@ -1,7 +1,0 @@
-TOKEN_identifier divisao
-TOKEN_assignment_operator :=
-TOKEN_float 15.0
-TOKEN_binary_selector /
-TOKEN_float 3.0
-TOKEN_period .
-$ $

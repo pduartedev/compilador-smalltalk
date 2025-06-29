@@ -58,8 +58,27 @@ bool ComandoAtribuicao::verificar_tipos_semanticos(vector<Variavel*>& variaveis,
         return true;
     }
     
-    // Se a variável já existe, verificar compatibilidade de tipos
-    if (!tipo_variavel->compativel_com(tipo_expressao)) {
+    // Se a variável já existe, atualizar seu tipo (inferência de tipos)
+    // Em Smalltalk, podemos atribuir qualquer tipo a uma variável Object
+    if (tipo_variavel->tipo == TipoSmallTalk::OBJECT) {
+        // Encontrar a variável e atualizar seu tipo
+        for (auto& var : variaveis) {
+            if (var->nome->nome == esquerda->nome) {
+                var->tipo_semantico = tipo_expressao;
+                cerr << "Inferência de tipos: Variável '" << esquerda->nome << "' atualizada de Object para " << tipo_expressao->to_string() << endl;
+                break;
+            }
+        }
+        
+        // Também atualizar parâmetros se necessário
+        for (auto& param : const_cast<vector<Variavel*>&>(parametros)) {
+            if (param->nome->nome == esquerda->nome) {
+                param->tipo_semantico = tipo_expressao;
+                cerr << "Inferência de tipos: Parâmetro '" << esquerda->nome << "' atualizado de Object para " << tipo_expressao->to_string() << endl;
+                break;
+            }
+        }
+    } else if (!tipo_variavel->compativel_com(tipo_expressao)) {
         cerr << "Erro semântico: Tipos incompatíveis na atribuição (" 
              << tipo_variavel->to_string() << " := " << tipo_expressao->to_string() << ")" << endl;
         return false;

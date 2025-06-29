@@ -40,12 +40,16 @@ Tipo* ExpressaoBinaria::verificar_tipos(const vector<Variavel*>& variaveis, cons
   
   // Regras de tipo para operações binárias
   if (operador == "+" || operador == "-" || operador == "*" || operador == "/" || operador == "%") {
-    if ((tipo_esq && tipo_esq->nome == "Float") || (tipo_dir && tipo_dir->nome == "Float")) {
+    // Em Smalltalk, Object pode aceitar qualquer operação - inferência dinâmica
+    if ((tipo_esq && tipo_esq->nome == "Object") || (tipo_dir && tipo_dir->nome == "Object")) {
+      tipo_resultado = Tipo::OBJECT_TYPE();
+    } else if ((tipo_esq && tipo_esq->nome == "Float") || (tipo_dir && tipo_dir->nome == "Float")) {
       tipo_resultado = Tipo::FLOAT_TYPE();
     } else if ((tipo_esq && tipo_esq->nome == "Integer") && (tipo_dir && tipo_dir->nome == "Integer")) {
       tipo_resultado = Tipo::INTEGER_TYPE();
     } else {
-      return nullptr;
+      // Para compatibilidade, assume Object como tipo de resultado
+      tipo_resultado = Tipo::OBJECT_TYPE();
     }
   } else {
     return nullptr;

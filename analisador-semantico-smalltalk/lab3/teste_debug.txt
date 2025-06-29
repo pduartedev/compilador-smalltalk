@@ -1,3 +1,0 @@
-valor := true.
-teste := valor not.
-resultado := teste.

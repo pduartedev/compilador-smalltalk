@@ -1,5 +1,0 @@
-TOKEN_identifier Transcript
-TOKEN_keyword show:
-TOKEN_quoted_string 'Hello, world!'
-TOKEN_period .
-$ $

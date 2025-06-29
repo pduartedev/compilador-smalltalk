@@ -1,7 +1,0 @@
-TOKEN_identifier resultado
-TOKEN_assignment_operator :=
-TOKEN_decimal_integer 10
-TOKEN_binary_selector +
-TOKEN_decimal_integer 5
-TOKEN_period .
-$ $

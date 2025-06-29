@@ -1,7 +1,0 @@
-TOKEN_identifier teste
-TOKEN_assignment_operator :=
-TOKEN_true true
-TOKEN_binary_selector +
-TOKEN_float 3.14
-TOKEN_period .
-$ $

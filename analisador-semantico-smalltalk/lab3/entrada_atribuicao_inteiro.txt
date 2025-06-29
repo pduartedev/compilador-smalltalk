@@ -1,5 +1,0 @@
-TOKEN_identifier x
-TOKEN_assignment_operator :=
-TOKEN_decimal_integer 42
-TOKEN_period .
-$ $

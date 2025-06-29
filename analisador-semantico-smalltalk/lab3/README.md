@@ -136,7 +136,11 @@ valor [
    cd lab3
    ```
    ```bash
+<<<<<<< HEAD
    ./bin/analisador ./gramatica-st/gramatica.conf ./gramatica-st/tabela_lr1.conf < entrada_exemplo.txt
+=======
+   ./bin/analisador ./gramatica-st/gramatica.conf ./gramatica-st/tabela_lr1.conf < entradas/entrada_exemplo.txt
+>>>>>>> be4637b (Fix: organizando diretorios)
    ```
 
 ## Saída
