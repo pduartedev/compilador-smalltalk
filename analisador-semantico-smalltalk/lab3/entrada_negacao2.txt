@@ -1,0 +1,6 @@
+TOKEN_identifier negacao
+TOKEN_assignment_operator :=
+TOKEN_true true
+TOKEN_binary_selector !
+TOKEN_period .
+$ $

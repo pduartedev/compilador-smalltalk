@@ -25,10 +25,10 @@ void ExpressaoLogica::debug_com_tab(int tab) {
 Tipo* ExpressaoLogica::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
     Tipo* tipo_esq = esquerda->verificar_tipos(variaveis, parametros);
     
-    if (operador == "!") {
+    if (operador == "!" || operador == "not") {
         // Operador unário de negação
         if (!tipo_esq->pode_fazer_operacao_logica()) {
-            cerr << "Erro semântico: Operador ! não pode ser aplicado ao tipo " 
+            cerr << "Erro semântico: Operador " << operador << " não pode ser aplicado ao tipo " 
                  << tipo_esq->to_string() << endl;
             return nullptr;
         }
@@ -55,7 +55,7 @@ Tipo* ExpressaoLogica::verificar_tipos(const vector<Variavel*>& variaveis, const
 double ExpressaoLogica::calcular_valor(const map<string, double>& valores_variaveis) {
     double val_esq = esquerda->calcular_valor(valores_variaveis);
     
-    if (operador == "!") {
+    if (operador == "!" || operador == "not") {
         return (val_esq == 0.0) ? 1.0 : 0.0;
     }
     

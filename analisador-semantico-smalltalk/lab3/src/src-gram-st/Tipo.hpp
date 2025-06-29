@@ -39,11 +39,6 @@ public:
         return instance;
     }
     
-    static Tipo* UNDEFINED_TYPE() {
-        static Tipo* instance = new Tipo(TipoSmallTalk::UNDEFINED, "UNDEFINED");
-        return instance;
-    }
-    
     bool compativel_com(Tipo* outro);
     bool pode_fazer_operacao_aritmetica();
     bool pode_fazer_operacao_logica();

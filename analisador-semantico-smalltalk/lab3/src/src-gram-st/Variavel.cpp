@@ -49,9 +49,7 @@ Tipo* Variavel::inferir_tipo_semantico() {
   if (tipo == nullptr) return Tipo::OBJECT_TYPE();
   
   string tipo_str = tipo->nome;
-  if (tipo_str == "UNDEFINED") {
-    return Tipo::UNDEFINED_TYPE();
-  } else if (tipo_str == "Integer" || tipo_str == "int") {
+  if (tipo_str == "Integer" || tipo_str == "int") {
     return Tipo::INTEGER_TYPE();
   } else if (tipo_str == "Float" || tipo_str == "float") {
     return Tipo::FLOAT_TYPE();
@@ -64,7 +62,5 @@ Tipo* Variavel::inferir_tipo_semantico() {
 
 void Variavel::debug_com_tab(int tab) {
   tab3(tab);
-  string tipo_str = (tipo != nullptr) ? tipo->nome : "null";
-  string tipo_semantico_str = (tipo_semantico != nullptr) ? tipo_semantico->to_string() : "null";
-  cerr << "[" << nome->nome << ":" << tipo_str << " (" << tipo_semantico_str << ")] Variavel Declarada" << endl;
+  cerr << "[" << nome->nome << ":" <<  tipo->nome << "] Variavel Declarada" << endl;
 }

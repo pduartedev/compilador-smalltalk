@@ -15,6 +15,11 @@ Funcao* Funcao::extrai_funcao(No_arv_parse *no) {
     return metodo;
   }
   
+  // Debug: verificar qual é o símbolo do nó raiz
+  if (no != nullptr) {
+    cerr << "DEBUG: Nó raiz da árvore de parse: " << no->simb << endl;
+  }
+  
   // Se não encontrou método, verifica se há statements no nível superior
   // para criar uma "função implícita" (script principal)
   if (no != nullptr) {
@@ -30,6 +35,25 @@ Funcao* Funcao::extrai_funcao(No_arv_parse *no) {
       if (funcao_implicita != nullptr) {
         return funcao_implicita;
       }
+    }
+    // Verificar se o nó raiz é TOKEN_period - extrair statement do primeiro filho
+    else if (no->simb == "TOKEN_period" && no->filhos.size() > 0) {
+      // O primeiro filho deve ser o statement
+      if (no->filhos[0]->simb == "Statement") {
+        cerr << "DEBUG: Encontrado Statement como filho do TOKEN_period" << endl;
+        Funcao* funcao_implicita = criar_funcao_statement_simples(no->filhos[0]);
+        if (funcao_implicita != nullptr) {
+          return funcao_implicita;
+        }
+      }
+    }
+    // Caso especial: buscar recursivamente por qualquer Statement na árvore
+    else {
+      cerr << "DEBUG: Buscando Statement recursivamente na árvore" << endl;
+      // Funcao* funcao_statement = buscar_e_extrair_statement_recursivo(no);
+      // if (funcao_statement != nullptr) {
+      //   return funcao_statement;
+      // }
     }
   }
   
@@ -221,8 +245,8 @@ vector<Variavel*> Funcao::extrai_temporaries(No_arv_parse *no) {
         Variavel* var = new Variavel();
         var->nome = ID::extrai_ID(no->filhos[1]);
         var->tipo = new ID();
-        var->tipo->nome = "UNDEFINED"; // Será inferido na primeira atribuição
-        var->tipo_semantico = Tipo::UNDEFINED_TYPE();
+        var->tipo->nome = "Object";
+        var->tipo_semantico = var->inferir_tipo_semantico();
         variaveis.push_back(var);
       }
       
@@ -255,8 +279,8 @@ vector<Variavel*> Funcao::extrai_variable_list(No_arv_parse *no) {
         Variavel* var = new Variavel();
         var->nome = ID::extrai_ID(no->filhos[0]);
         var->tipo = new ID();
-        var->tipo->nome = "UNDEFINED"; // Será inferido na primeira atribuição
-        var->tipo_semantico = Tipo::UNDEFINED_TYPE();
+        var->tipo->nome = "Object";
+        var->tipo_semantico = var->inferir_tipo_semantico();
         variaveis.push_back(var);
       }
       

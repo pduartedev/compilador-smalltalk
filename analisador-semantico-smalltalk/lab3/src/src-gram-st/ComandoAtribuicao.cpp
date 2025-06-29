@@ -25,26 +25,26 @@ bool ComandoAtribuicao::verificar_tipos_semanticos(vector<Variavel*>& variaveis,
     }
     
     // Procurar se a variável já existe
-    Variavel* variavel_encontrada = nullptr;
+    Tipo* tipo_variavel = nullptr;
     
-    for (auto& var : variaveis) {
+    for (const auto& var : variaveis) {
         if (var->nome->nome == esquerda->nome) {
-            variavel_encontrada = var;
+            tipo_variavel = var->tipo_semantico;
             break;
         }
     }
     
-    if (variavel_encontrada == nullptr) {
+    if (tipo_variavel == nullptr) {
         for (const auto& param : parametros) {
             if (param->nome->nome == esquerda->nome) {
-                variavel_encontrada = const_cast<Variavel*>(param);
+                tipo_variavel = param->tipo_semantico;
                 break;
             }
         }
     }
     
     // Se a variável não existe, criar uma nova com o tipo da expressão (declaração implícita)
-    if (variavel_encontrada == nullptr) {
+    if (tipo_variavel == nullptr) {
         cerr << "Declaração implícita da variável '" << esquerda->nome << "' com tipo " << tipo_expressao->to_string() << endl;
         
         // Criar nova variável
@@ -52,25 +52,16 @@ bool ComandoAtribuicao::verificar_tipos_semanticos(vector<Variavel*>& variaveis,
         nova_variavel->nome = esquerda;
         nova_variavel->tipo_semantico = tipo_expressao;
         
-        // Adicionar à lista de variáveis
-        variaveis.push_back(nova_variavel);
+        // Adicionar à lista de variáveis (cast para remover const)
+        const_cast<vector<Variavel*>&>(variaveis).push_back(nova_variavel);
         
         return true;
     }
     
-    // Se a variável existe e tem tipo UNDEFINED, fazer inferência de tipos
-    if (variavel_encontrada->tipo_semantico->tipo == TipoSmallTalk::UNDEFINED) {
-        cerr << "Inferindo tipo da variável '" << esquerda->nome << "' como " << tipo_expressao->to_string() << endl;
-        variavel_encontrada->tipo_semantico = tipo_expressao;
-        // Atualizar também o campo tipo para consistência
-        variavel_encontrada->tipo->nome = tipo_expressao->nome;
-        return true;
-    }
-    
-    // Se a variável já existe com tipo definido, verificar compatibilidade de tipos
-    if (!variavel_encontrada->tipo_semantico->compativel_com(tipo_expressao)) {
+    // Se a variável já existe, verificar compatibilidade de tipos
+    if (!tipo_variavel->compativel_com(tipo_expressao)) {
         cerr << "Erro semântico: Tipos incompatíveis na atribuição (" 
-             << variavel_encontrada->tipo_semantico->to_string() << " := " << tipo_expressao->to_string() << ")" << endl;
+             << tipo_variavel->to_string() << " := " << tipo_expressao->to_string() << ")" << endl;
         return false;
     }
     

@@ -19,6 +19,9 @@ public:
   static Expressao* extrai_number_literal(No_arv_parse* no);
   static Expressao* extrai_message_sequence(Expressao* primary, No_arv_parse* no);
   static Expressao* extrai_message_chain(Expressao* primary, No_arv_parse* no);
+  static Expressao* extrai_unary_message_chain(Expressao* primary, No_arv_parse* no);
+  static Expressao* extrai_unary_message_list(Expressao* primary, No_arv_parse* no);
+  static string extrai_unary_message(No_arv_parse* no);
   static Expressao* extrai_binary_message_chain(Expressao* primary, No_arv_parse* no);
   static Expressao* extrai_binary_message_list(Expressao* primary, No_arv_parse* no);
   static Expressao* extrai_binary_message(Expressao* primary, No_arv_parse* no);

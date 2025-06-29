@@ -1,0 +1,6 @@
+TOKEN_identifier resultado
+TOKEN_assignment_operator :=
+TOKEN_true true
+TOKEN_identifier not
+TOKEN_period .
+$ $

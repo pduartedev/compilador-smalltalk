@@ -1,0 +1,13 @@
+TOKEN_identifier resultado_e
+TOKEN_assignment_operator :=
+TOKEN_true true
+TOKEN_binary_selector &&
+TOKEN_false false
+TOKEN_period .
+TOKEN_identifier resultado_ou
+TOKEN_assignment_operator :=
+TOKEN_true true
+TOKEN_binary_selector ||
+TOKEN_false false
+TOKEN_period .
+$ $

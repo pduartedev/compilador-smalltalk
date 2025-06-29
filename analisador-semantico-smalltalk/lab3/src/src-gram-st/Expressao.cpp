@@ -83,6 +83,13 @@ Expressao* Expressao::extrai_primary(No_arv_parse* no) {
     return var;
   }
   
+  // TOKEN_binary_selector (operador unário de negação !)
+  if (no->simb == "TOKEN_binary_selector" && no->dado_extra == "!") {
+    // Este será tratado como parte de uma expressão binária onde o operando esquerdo precisa ser extraído
+    // Por simplicidade, retornamos nullptr aqui e tratamos no extrator de mensagens
+    return nullptr;
+  }
+  
   // Literal (gramática completa)
   if (no->simb == "Literal") {
     return Expressao::extrai_literal(no);
@@ -225,8 +232,9 @@ Expressao* Expressao::extrai_message_chain(Expressao* primary, No_arv_parse* no)
   
   // Message_Chain -> Unary_Message_Chain | Binary_Message_Chain | Keyword_Message
   if (no->simb == "Message_Chain" && no->filhos.size() > 0) {
-    // Por simplicidade, só processamos Binary_Message_Chain
-    if (no->filhos[0]->simb == "Binary_Message_Chain") {
+    if (no->filhos[0]->simb == "Unary_Message_Chain") {
+      return extrai_unary_message_chain(primary, no->filhos[0]);
+    } else if (no->filhos[0]->simb == "Binary_Message_Chain") {
       return extrai_binary_message_chain(primary, no->filhos[0]);
     }
   }
@@ -292,18 +300,7 @@ Expressao* Expressao::extrai_binary_message(Expressao* primary, No_arv_parse* no
     Expressao* direita = extrai_binary_argument(no->filhos[1]);
     
     if (!operador.empty() && direita != nullptr) {
-      // Debug: imprimir operador detectado
-      cerr << "DEBUG: Operador detectado: '" << operador << "'" << endl;
-      
-      // Verificar se é operador relacional
-      if (operador == "<" || operador == ">" || operador == "==" || 
-          operador == "<=" || operador == ">=" || operador == "!=") {
-        cerr << "DEBUG: Criando ExpressaoRelacional para: " << operador << endl;
-        return new ExpressaoRelacional(primary, direita, operador);
-      } else {
-        cerr << "DEBUG: Criando ExpressaoBinaria para: " << operador << endl;
-        return new ExpressaoBinaria(primary, operador, direita);
-      }
+      return new ExpressaoBinaria(primary, operador, direita);
     }
   }
   
@@ -367,16 +364,84 @@ Expressao* Expressao::aplica_precedencia_operadores(Expressao* primary, const ve
   
   for (const auto& operacao : operacoes) {
     string operador = operacao.first;
-    Expressao* direita = operacao.second;
+    Expressao* operando = operacao.second;
     
-    // Verificar se é operador relacional
-    if (operador == "<" || operador == ">" || operador == "==" || 
-        operador == "<=" || operador == ">=" || operador == "!=") {
-      resultado = new ExpressaoRelacional(resultado, direita, operador);
+    // Verificar se é um operador lógico
+    if (operador == "&&" || operador == "||") {
+      resultado = new ExpressaoLogica(resultado, operando, operador);
+    }
+    // Verificar se é um operador relacional
+    else if (operador == "<" || operador == ">" || operador == "<=" || 
+        operador == ">=" || operador == "==" || operador == "!=") {
+      resultado = new ExpressaoRelacional(resultado, operando, operador);
     } else {
-      resultado = new ExpressaoBinaria(resultado, operador, direita);
+      // Operadores aritméticos
+      resultado = new ExpressaoBinaria(resultado, operador, operando);
     }
   }
   
   return resultado;
+}
+
+Expressao* Expressao::extrai_unary_message_chain(Expressao* primary, No_arv_parse* no) {
+  if (no == nullptr || primary == nullptr) return primary;
+  
+  // Unary_Message_Chain -> Unary_Message_List | Unary_Message_List Binary_Message_Chain | Unary_Message_List Keyword_Message
+  if (no->simb == "Unary_Message_Chain" && no->filhos.size() > 0) {
+    Expressao* resultado = extrai_unary_message_list(primary, no->filhos[0]);
+    
+    // Se há mais filhos, processá-los sequencialmente
+    if (no->filhos.size() > 1) {
+      if (no->filhos[1]->simb == "Binary_Message_Chain") {
+        resultado = extrai_binary_message_chain(resultado, no->filhos[1]);
+      }
+      // Aqui poderia adicionar suporte a Keyword_Message se necessário
+    }
+    
+    return resultado;
+  }
+  
+  return primary;
+}
+
+Expressao* Expressao::extrai_unary_message_list(Expressao* primary, No_arv_parse* no) {
+  if (no == nullptr || primary == nullptr) return primary;
+  
+  // Unary_Message_List -> Unary_Message Unary_Message_List | Unary_Message
+  if (no->simb == "Unary_Message_List" && no->filhos.size() > 0) {
+    Expressao* resultado = primary;
+    
+    // Processa o primeiro Unary_Message
+    if (no->filhos[0]->simb == "Unary_Message") {
+      string operador_unario = extrai_unary_message(no->filhos[0]);
+      
+      if (operador_unario == "not") {
+        // Criar uma expressão de negação
+        resultado = new ExpressaoLogica(resultado, nullptr, "not");
+      }
+      // Aqui podem ser adicionados outros operadores unários como "abs", etc.
+    }
+    
+    // Se há mais mensagens unárias na lista, processá-las recursivamente
+    if (no->filhos.size() > 1 && no->filhos[1]->simb == "Unary_Message_List") {
+      resultado = extrai_unary_message_list(resultado, no->filhos[1]);
+    }
+    
+    return resultado;
+  }
+  
+  return primary;
+}
+
+string Expressao::extrai_unary_message(No_arv_parse* no) {
+  if (no == nullptr) return "";
+  
+  // Unary_Message -> TOKEN_identifier
+  if (no->simb == "Unary_Message" && no->filhos.size() > 0) {
+    if (no->filhos[0]->simb == "TOKEN_identifier") {
+      return no->filhos[0]->dado_extra;
+    }
+  }
+  
+  return "";
 }
