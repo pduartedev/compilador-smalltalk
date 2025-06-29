@@ -75,9 +75,15 @@ Comando* Comando::extrai_comando_de_expression(No_arv_parse* no) {
       return cmd;
     }
     
-    // Basic_Expression - tratar como comando de expressão
+    // Basic_Expression - verificar se é uma estrutura WHILE antes de tratar como comando de expressão
     if (filho->simb == "Basic_Expression") {
-      // Criar um comando de atribuição temporário para expressões simples
+      // Primeiro, tentar extrair um comando WHILE
+      ComandoWhile* while_cmd = extrai_comando_while(filho);
+      if (while_cmd != nullptr) {
+        return while_cmd;
+      }
+      
+      // Se não for WHILE, criar um comando de atribuição temporário para expressões simples
       ComandoAtribuicao* cmd = new ComandoAtribuicao();
       cmd->esquerda = new ID();
       cmd->esquerda->nome = "__temp__"; // Variável temporária para resultado da expressão
@@ -88,6 +94,121 @@ Comando* Comando::extrai_comando_de_expression(No_arv_parse* no) {
   
   // Se não conseguir extrair nenhum comando, retorna nullptr
   return nullptr;
+}
+
+ComandoWhile* Comando::extrai_comando_while(No_arv_parse* no) {
+  if (no == nullptr) return nullptr;
+  
+  // Basic_Expression -> Primary Message_Sequence
+  if (no->simb == "Basic_Expression" && no->filhos.size() >= 2) {
+    No_arv_parse* primary = no->filhos[0];
+    No_arv_parse* message_sequence = no->filhos[1];
+    
+    // Verificar se o Primary é um Block_Constructor (condição do while)
+    if (primary->simb == "Primary" && primary->filhos.size() >= 1) {
+      No_arv_parse* block_constructor = primary->filhos[0];
+      if (block_constructor->simb == "Block_Constructor") {
+        
+        // Verificar se Message_Sequence contém whileTrue:
+        if (message_sequence->simb == "Message_Sequence" && message_sequence->filhos.size() >= 1) {
+          No_arv_parse* message_chain = message_sequence->filhos[0];
+          
+          if (message_chain->simb == "Message_Chain" && message_chain->filhos.size() >= 1) {
+            No_arv_parse* keyword_message = message_chain->filhos[0];
+            
+            if (keyword_message->simb == "Keyword_Message" && keyword_message->filhos.size() >= 1) {
+              No_arv_parse* keyword_element = keyword_message->filhos[0];
+              
+              if (keyword_element->simb == "Keyword_Message_Element" && keyword_element->filhos.size() >= 2) {
+                string keyword = keyword_element->filhos[0]->dado_extra;
+                
+                if (keyword == "whileTrue:" || keyword == "whileFalse:") {
+                  // Extrair a condição do primeiro bloco
+                  Expressao* condicao = extrair_expressao_do_bloco(block_constructor);
+                  
+                  // Extrair os comandos do segundo bloco (corpo do loop)
+                  vector<Comando*> comandos_loop = extrair_comandos_do_bloco_while(keyword_element->filhos[1]);
+                  
+                  // Criar o comando while
+                  ComandoWhile* cmd_while = new ComandoWhile();
+                  cmd_while->condicao = condicao;
+                  cmd_while->comandos_loop = comandos_loop;
+                  
+                  return cmd_while;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  return nullptr;
+}
+
+Expressao* Comando::extrair_expressao_do_bloco(No_arv_parse* block_constructor) {
+  if (block_constructor == nullptr) return nullptr;
+  
+  // Block_Constructor -> TOKEN_left_bracket Block_Body_Content TOKEN_right_bracket
+  if (block_constructor->simb == "Block_Constructor" && block_constructor->filhos.size() >= 2) {
+    No_arv_parse* block_body = block_constructor->filhos[1];
+    
+    if (block_body->simb == "Block_Body_Content" && block_body->filhos.size() >= 2) {
+      // Block_Body_Content -> Temporaries_Opt Block_Statements_Opt
+      No_arv_parse* block_statements = block_body->filhos[1];
+      
+      if (block_statements->simb == "Block_Statements_Opt" && block_statements->filhos.size() >= 1) {
+        No_arv_parse* statements = block_statements->filhos[0];
+        
+        if (statements->simb == "Block_Statements" && statements->filhos.size() >= 1) {
+          No_arv_parse* statement = statements->filhos[0];
+          
+          if (statement->simb == "Statement" && statement->filhos.size() >= 1) {
+            No_arv_parse* expression = statement->filhos[0];
+            
+            if (expression->simb == "Expression") {
+              return Expressao::extrai_expressao(expression);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  return nullptr;
+}
+
+vector<Comando*> Comando::extrair_comandos_do_bloco_while(No_arv_parse* no) {
+  vector<Comando*> comandos;
+  
+  if (no == nullptr) return comandos;
+  
+  // Keyword_Argument pode ser apenas Primary (Block_Constructor)
+  if (no->simb == "Keyword_Argument" && no->filhos.size() >= 1) {
+    No_arv_parse* primary = no->filhos[0];
+    
+    if (primary->simb == "Primary" && primary->filhos.size() >= 1) {
+      No_arv_parse* block_constructor = primary->filhos[0];
+      
+      if (block_constructor->simb == "Block_Constructor" && block_constructor->filhos.size() >= 2) {
+        No_arv_parse* block_body = block_constructor->filhos[1];
+        
+        if (block_body->simb == "Block_Body_Content" && block_body->filhos.size() >= 2) {
+          // Block_Body_Content -> Temporaries_Opt Block_Statements_Opt
+          No_arv_parse* block_statements = block_body->filhos[1];
+          
+          if (block_statements->simb == "Block_Statements_Opt" && block_statements->filhos.size() >= 1) {
+            No_arv_parse* statements = block_statements->filhos[0];
+            
+            comandos = Comando::extrai_block_statements(statements);
+          }
+        }
+      }
+    }
+  }
+  
+  return comandos;
 }
 
 void Comando::debug_com_tab(int tab) {

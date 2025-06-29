@@ -7,12 +7,17 @@ using namespace std;
 
 class Variavel;
 class ComandoLista; // Forward declaration
+class ComandoWhile; // Forward declaration
+class Expressao; // Forward declaration
 
 class Comando {
 public:
   static vector<Comando*> extrai_lista_comandos(No_arv_parse* no);
   static Comando* extrai_comando(No_arv_parse* no);
   static Comando* extrai_comando_de_expression(No_arv_parse* no);
+  static ComandoWhile* extrai_comando_while(No_arv_parse* no);
+  static Expressao* extrair_expressao_do_bloco(No_arv_parse* block_constructor);
+  static vector<Comando*> extrair_comandos_do_bloco_while(No_arv_parse* no);
   static void extrai_block_content(No_arv_parse* no, ComandoLista* cmd);
   static vector<Comando*> extrai_block_statements(No_arv_parse* no);
   static vector<Comando*> extrai_block_statement_list(No_arv_parse* no);
