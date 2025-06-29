@@ -74,7 +74,6 @@ int main(int argc, char * argv[]) {
     parametros_passados.push_back(i + 1); // Valor padrão
   }
   
-  cout << "Ultimo valor calculado: ";
   double resultado = ana.calcula_ultimo_valor(func, parametros_passados);
   
   // Determinar o tipo do resultado baseado no último comando
@@ -102,6 +101,7 @@ int main(int argc, char * argv[]) {
   }
   cerr << "DEBUG: Tipo final determinado: " << (int)tipo_resultado->tipo << endl;
   
+  cout << "Ultimo valor calculado: ";
   ana.imprimir_resultado(resultado, tipo_resultado);
   return 0;
 }

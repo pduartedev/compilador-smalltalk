@@ -70,6 +70,13 @@ Expressao* Expressao::extrai_primary(No_arv_parse* no) {
   //           Block_Constructor | TOKEN_self | TOKEN_super | TOKEN_true | TOKEN_false | TOKEN_nil
   
   if (no->simb == "Primary") {
+    // Verificar se é uma expressão entre parênteses
+    if (no->filhos.size() == 3 && 
+        no->filhos[0]->simb == "TOKEN_left_paren" && 
+        no->filhos[2]->simb == "TOKEN_right_paren") {
+      // Primary -> TOKEN_left_paren Expression TOKEN_right_paren
+      return Expressao::extrai_expressao(no->filhos[1]);
+    }
     // Processar o primeiro filho que contém o conteúdo real
     if (no->filhos.size() > 0) {
       return Expressao::extrai_primary(no->filhos[0]);
@@ -94,12 +101,6 @@ Expressao* Expressao::extrai_primary(No_arv_parse* no) {
   // Literal (gramática completa)
   if (no->simb == "Literal") {
     return Expressao::extrai_literal(no);
-  }
-  
-  // TOKEN_left_paren Expression TOKEN_right_paren (gramática completa)
-  if (no->simb == "TOKEN_left_paren") {
-    // Buscar a expressão entre parênteses (ignorado por simplicidade)
-    return nullptr;
   }
   
   // TOKEN_true, TOKEN_false (gramática completa)
@@ -127,11 +128,6 @@ Expressao* Expressao::extrai_primary(No_arv_parse* no) {
   if (no->simb == "Block_Constructor") {
     // Por simplicidade, retorna nil
     return new ExpressaoInt(0);
-  }
-  
-  // Expressão entre parênteses: TOKEN_left_paren Expression TOKEN_right_paren
-  if (no->simb == "TOKEN_left_paren" && no->filhos.size() >= 2) {
-    return Expressao::extrai_expressao(no->filhos[1]);
   }
   
   // Se for Primary com filhos, processar o primeiro filho

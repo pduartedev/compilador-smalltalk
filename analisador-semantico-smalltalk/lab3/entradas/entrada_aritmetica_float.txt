@@ -4,8 +4,10 @@ TOKEN_float 3.14
 TOKEN_binary_selector +
 TOKEN_float 2.5
 TOKEN_binary_selector *
+TOKEN_left_paren (
 TOKEN_decimal_integer 2
 TOKEN_binary_selector -
 TOKEN_float 1.0
+TOKEN_right_paren )
 TOKEN_period .
 $ $

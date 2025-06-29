@@ -1,0 +1,16 @@
+TOKEN_identifier Object
+TOKEN_subclass  subclass:
+TOKEN_identifier ClasseTeste
+TOKEN_left_bracket [
+TOKEN_keyword teste
+TOKEN_identifier param
+TOKEN_left_bracket [
+TOKEN_identifier param
+TOKEN_assignment_operator :=
+TOKEN_decimal_integer 42
+TOKEN_period .
+TOKEN_return_operator ^
+TOKEN_identifier param
+TOKEN_right_bracket ]
+TOKEN_right_bracket ]
+$ $
