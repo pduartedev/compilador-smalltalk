@@ -133,10 +133,10 @@ valor [
 
 2. **Executar com um programa**:
    ```bash
-   cd bin
+   cd lab3
    ```
    ```bash
-   ./analisador ../gramatica-st/gramatica.conf ../gramatica-st/tabela_lr1.conf < ../exemplo_metodo.st
+   ./bin/analisador ./gramatica-st/gramatica.conf ./gramatica-st/tabela_lr1.conf < entrada_exemplo.txt
    ```
 
 ## Saída
