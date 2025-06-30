@@ -54,19 +54,19 @@ double Analisador::calcula_ultimo_valor(Funcao *f, const vector<double> &params)
 }
 
 void Analisador::imprimir_resultado(double valor, Tipo* tipo) {
-    cerr << "DEBUG imprimir_resultado: valor=" << valor << ", tipo=" << (tipo ? (int)tipo->tipo : -1) << endl;
-    cerr << "DEBUG: INTEGER=" << (int)TipoSmallTalk::INTEGER << ", FLOAT=" << (int)TipoSmallTalk::FLOAT << ", BOOLEAN=" << (int)TipoSmallTalk::BOOLEAN << endl;
+    // cerr << "DEBUG imprimir_resultado: valor=" << valor << ", tipo=" << (tipo ? (int)tipo->tipo : -1) << endl;
+    // cerr << "DEBUG: INTEGER=" << (int)TipoSmallTalk::INTEGER << ", FLOAT=" << (int)TipoSmallTalk::FLOAT << ", BOOLEAN=" << (int)TipoSmallTalk::BOOLEAN << endl;
     if (tipo == nullptr || tipo->tipo == TipoSmallTalk::INTEGER) {
-        cerr << "DEBUG: Entrou na condição INTEGER" << endl;
+        // cerr << "DEBUG: Entrou na condição INTEGER" << endl;
         cout << static_cast<int>(valor) << endl;
     } else if (tipo->tipo == TipoSmallTalk::FLOAT) {
-        cerr << "DEBUG: Entrou na condição FLOAT" << endl;
+        // cerr << "DEBUG: Entrou na condição FLOAT" << endl;
         cout << fixed << setprecision(2) << valor << endl;
     } else if (tipo->tipo == TipoSmallTalk::BOOLEAN) {
-        cerr << "DEBUG: Entrou na condição BOOLEAN" << endl;
+        // cerr << "DEBUG: Entrou na condição BOOLEAN" << endl;
         cout << (valor != 0.0 ? "true" : "false") << endl;
     } else {
-        cerr << "DEBUG: Entrou na condição ELSE" << endl;
+        // cerr << "DEBUG: Entrou na condição ELSE" << endl;
         cout << valor << endl;
     }
 }

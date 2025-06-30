@@ -1,6 +1,7 @@
 #include "ExpressaoCondicional.hpp"
 #include "Variavel.hpp"
 #include "Funcao.hpp"
+#include "ComandoAtribuicao.hpp"
 #include "../debug-util.hpp"
 #include <iostream>
 
@@ -8,7 +9,19 @@ ExpressaoCondicional::ExpressaoCondicional(Expressao* cond, const vector<Comando
     : condicao(cond), comandos_then(cmd_then), comandos_else(cmd_else) {
     tem_else = !cmd_else.empty();
     operador = tem_else ? "ifTrue:ifFalse:" : "ifTrue:";
-    tipo_resultado = Tipo::BOOLEAN_TYPE();
+    
+    // Determinar o tipo baseado nos comandos dos blocos
+    if (!comandos_then.empty()) {
+        // Tentar obter o tipo do último comando do bloco THEN
+        ComandoAtribuicao* ultima_atrib = dynamic_cast<ComandoAtribuicao*>(comandos_then.back());
+        if (ultima_atrib && ultima_atrib->direita && ultima_atrib->direita->tipo_resultado) {
+            tipo_resultado = ultima_atrib->direita->tipo_resultado;
+        } else {
+            tipo_resultado = Tipo::INTEGER_TYPE(); // Padrão para expressões aritméticas
+        }
+    } else {
+        tipo_resultado = Tipo::INTEGER_TYPE();
+    }
 }
 
 void ExpressaoCondicional::debug_com_tab(int tab) {
