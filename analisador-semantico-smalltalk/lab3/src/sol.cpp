@@ -81,14 +81,11 @@ int main(int argc, char * argv[]) {
   if (!func->comandos.empty()) {
     // Tentar obter o tipo do último comando
     Comando* ultimo_cmd = func->comandos.back();
-    cerr << "DEBUG: Tipo do último comando: " << typeid(*ultimo_cmd).name() << endl;
     
     // Se for uma atribuição, obter o tipo da expressão à direita
     ComandoAtribuicao* atribuicao = dynamic_cast<ComandoAtribuicao*>(ultimo_cmd);
     if (atribuicao != nullptr) {
-      cerr << "DEBUG: É uma atribuição para variável: " << (atribuicao->esquerda ? atribuicao->esquerda->nome : "NULL") << endl;
       if (atribuicao->direita != nullptr && atribuicao->direita->tipo_resultado != nullptr) {
-        cerr << "DEBUG: Tipo da expressão à direita: " << (int)atribuicao->direita->tipo_resultado->tipo << endl;
         tipo_resultado = atribuicao->direita->tipo_resultado;
         
         // Verificar se é especificamente o comando de return (atribuição à variável __return__)
@@ -99,7 +96,6 @@ int main(int argc, char * argv[]) {
       }
     }
   }
-  cerr << "DEBUG: Tipo final determinado: " << (int)tipo_resultado->tipo << endl;
   
   cout << "Ultimo valor calculado: ";
   ana.imprimir_resultado(resultado, tipo_resultado);
