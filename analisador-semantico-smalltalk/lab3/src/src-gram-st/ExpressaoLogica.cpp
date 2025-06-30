@@ -65,9 +65,9 @@ double ExpressaoLogica::calcular_valor(const map<string, double>& valores_variav
     
     double val_dir = direita->calcular_valor(valores_variaveis);
     
-    if (operador == "&&") {
+    if (operador == "&") {
         return (val_esq != 0.0 && val_dir != 0.0) ? 1.0 : 0.0;
-    } else if (operador == "||") {
+    } else if (operador == "|") {
         return (val_esq != 0.0 || val_dir != 0.0) ? 1.0 : 0.0;
     }
     

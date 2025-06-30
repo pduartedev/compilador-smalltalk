@@ -1,22 +1,22 @@
 TOKEN_identifier Object
 TOKEN_subclass  subclass:
-TOKEN_identifier ClasseTeste
+TOKEN_identifier Teste
 TOKEN_left_bracket [
-TOKEN_keyword testeModulo
-TOKEN_identifier param
+TOKEN_keyword teste
+TOKEN_identifier x
 TOKEN_left_bracket [
 TOKEN_pipe
 TOKEN_identifier resultado
 TOKEN_pipe
-TOKEN_identifier param
+TOKEN_identifier x
 TOKEN_assignment_operator :=
-TOKEN_decimal_integer 50
+TOKEN_decimal_integer 5
 TOKEN_period .
 TOKEN_identifier resultado
 TOKEN_assignment_operator :=
-TOKEN_identifier param
-TOKEN_binary_selector %
-TOKEN_decimal_integer 7
+TOKEN_identifier x
+TOKEN_binary_selector <
+TOKEN_decimal_integer 10
 TOKEN_period .
 TOKEN_return_operator ^
 TOKEN_identifier resultado

@@ -1,0 +1,33 @@
+TOKEN_identifier Object
+TOKEN_subclass  subclass:
+TOKEN_identifier TesteLogicos
+TOKEN_left_bracket [
+TOKEN_keyword teste
+TOKEN_left_bracket [
+TOKEN_pipe
+TOKEN_identifier a
+TOKEN_identifier b
+TOKEN_identifier c
+TOKEN_pipe
+TOKEN_identifier a
+TOKEN_assignment_operator :=
+TOKEN_true true
+TOKEN_binary_selector &
+TOKEN_false false
+TOKEN_period .
+TOKEN_identifier b
+TOKEN_assignment_operator :=
+TOKEN_true true
+TOKEN_binary_selector |
+TOKEN_false false
+TOKEN_period .
+TOKEN_identifier c
+TOKEN_assignment_operator :=
+TOKEN_true true
+TOKEN_unary_selector not
+TOKEN_period .
+TOKEN_return_operator ^
+TOKEN_identifier a
+TOKEN_right_bracket ]
+TOKEN_right_bracket ]
+$ $

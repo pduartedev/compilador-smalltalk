@@ -51,6 +51,9 @@ Tipo* ExpressaoBinaria::verificar_tipos(const vector<Variavel*>& variaveis, cons
       // Para compatibilidade, assume Object como tipo de resultado
       tipo_resultado = Tipo::OBJECT_TYPE();
     }
+  } else if (operador == "<" || operador == ">" || operador == "<=" || operador == ">=" || operador == "==" || operador == "~=") {
+    // Operadores relacionais sempre retornam Boolean
+    tipo_resultado = Tipo::BOOLEAN_TYPE();
   } else {
     return nullptr;
   }
@@ -86,6 +89,18 @@ double ExpressaoBinaria::calcular_valor(const map<string, double>& valores_varia
       cerr << "Erro: Módulo por zero!" << endl;
       return 0.0;
     }
+  } else if (operador == "<") {
+    return (val_esq < val_dir) ? 1.0 : 0.0;
+  } else if (operador == ">") {
+    return (val_esq > val_dir) ? 1.0 : 0.0;
+  } else if (operador == "<=") {
+    return (val_esq <= val_dir) ? 1.0 : 0.0;
+  } else if (operador == ">=") {
+    return (val_esq >= val_dir) ? 1.0 : 0.0;
+  } else if (operador == "==") {
+    return (abs(val_esq - val_dir) < 1e-10) ? 1.0 : 0.0;
+  } else if (operador == "~=") {
+    return (abs(val_esq - val_dir) >= 1e-10) ? 1.0 : 0.0;
   }
   
   return 0.0;

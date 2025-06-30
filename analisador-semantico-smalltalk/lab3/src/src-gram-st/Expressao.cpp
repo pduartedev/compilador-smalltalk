@@ -373,7 +373,7 @@ Expressao* Expressao::aplica_precedencia_operadores(Expressao* primary, const ve
     Expressao* operando = operacao.second;
     
     // Verificar se é um operador lógico
-    if (operador == "&&" || operador == "||") {
+    if (operador == "&" || operador == "|") {
       resultado = new ExpressaoLogica(resultado, operando, operador);
     }
     // Verificar se é um operador relacional
