@@ -148,21 +148,14 @@ make
 ## Roadmap Futuro
 
 ### 🔮 Próximas Fases:
-- **Análise Semântica**: Verificação de tipos e escopo
-- **Geração de Código**: Target para máquina virtual ou código nativo
-- **Otimização**: Análise de fluxo de dados e otimizações
-
-### 🎯 Melhorias Planejadas:
-- Interface gráfica para debugging
-- Melhor tratamento de erros
-- Suporte a bibliotecas externas
-- Documentação interativa
+- **FRAMES**:
+- ...
 
 ## Autor
 
 **Patrick Duarte Pimenta**  
 Disciplina: Compiladores 2025  
-Universidade: [Nome da Universidade]
+Universidade: IFNMG - Campus Montes Claros
 
 ---
 
