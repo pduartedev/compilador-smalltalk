@@ -1,7 +1,7 @@
 # Compilador Smalltalk
 
 > *"And we become night time dreamers*  
-> *And street walkers, small talkers*  
+> *And street walkers, **small talkers***  
 > *When we should be daydreamers*  
 > *And moonwalkers and dream talkers"*  
 > **- DayDreamer - Aurora**
