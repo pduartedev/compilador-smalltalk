@@ -36,7 +36,17 @@ ExpressaoChamadaFuncao* ExpressaoChamadaFuncao::extrai_chamada_funcao(No_arv_par
         }
         
         // Extrai o argumento (parâmetro)
-        Expressao* param = Expressao::extrai_expressao(primeiro_elemento->filhos[1]);
+        Expressao* param = nullptr;
+        
+        // Keyword_Argument -> Primary
+        if (primeiro_elemento->filhos[1]->simb == "Keyword_Argument" && 
+            primeiro_elemento->filhos[1]->filhos.size() > 0) {
+          // Extrai a expressão do Primary dentro do Keyword_Argument
+          param = Expressao::extrai_expressao(primeiro_elemento->filhos[1]->filhos[0]);
+        } else {
+          param = Expressao::extrai_expressao(primeiro_elemento->filhos[1]);
+        }
+        
         if (param != nullptr) {
           parametros_extraidos.push_back(param);
         }
@@ -46,28 +56,50 @@ ExpressaoChamadaFuncao* ExpressaoChamadaFuncao::extrai_chamada_funcao(No_arv_par
     // Processa elementos adicionais da lista
     if (no->filhos.size() > 1 && no->filhos[1]->simb == "Keyword_Message_Element_List") {
       No_arv_parse* lista = no->filhos[1];
+      cout << "DEBUG: Lista inicial tem " << lista->filhos.size() << " filhos" << endl;
       
       while (lista != nullptr && lista->filhos.size() > 0) {
+        cout << "DEBUG: Processando lista com simbolo: " << lista->simb << ", filhos: " << lista->filhos.size() << endl;
+        
         if (lista->filhos[0]->simb == "Keyword_Message_Element") {
           No_arv_parse* elemento = lista->filhos[0];
+          cout << "DEBUG: Elemento tem " << elemento->filhos.size() << " filhos" << endl;
+          
           if (elemento->filhos.size() >= 2) {
             // Adiciona ao nome da função
             if (elemento->filhos[0]->simb == "TOKEN_keyword") {
               nome_completo += elemento->filhos[0]->dado_extra;
+              cout << "DEBUG: Adicionando keyword: " << elemento->filhos[0]->dado_extra << endl;
             }
             
             // Extrai o argumento
-            Expressao* param = Expressao::extrai_expressao(elemento->filhos[1]);
+            cout << "DEBUG: Extraindo parametro do tipo: " << elemento->filhos[1]->simb << endl;
+            Expressao* param = nullptr;
+            
+            // Keyword_Argument -> Primary
+            if (elemento->filhos[1]->simb == "Keyword_Argument" && 
+                elemento->filhos[1]->filhos.size() > 0) {
+              // Extrai a expressão do Primary dentro do Keyword_Argument
+              param = Expressao::extrai_expressao(elemento->filhos[1]->filhos[0]);
+            } else {
+              param = Expressao::extrai_expressao(elemento->filhos[1]);
+            }
+            
             if (param != nullptr) {
               parametros_extraidos.push_back(param);
+              cout << "DEBUG: Parametro extraido com sucesso" << endl;
+            } else {
+              cout << "DEBUG: Falha ao extrair parametro" << endl;
             }
           }
         }
         
         // Avança para o próximo elemento da lista
         if (lista->filhos.size() > 1) {
+          cout << "DEBUG: Avancando para proximo elemento da lista" << endl;
           lista = lista->filhos[1];
         } else {
+          cout << "DEBUG: Fim da lista" << endl;
           break;
         }
       }

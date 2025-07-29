@@ -141,14 +141,16 @@ void FrameFuncao::analisar_expressao_para_chamadas(Expressao* expr, int& max_par
     string nome_chamada = (chamada->nome_funcao && chamada->nome_funcao->nome.length() > 0) ? 
                           chamada->nome_funcao->nome : "funcao_anonima";
     cout << "Analisando chamada de funcao: " << nome_chamada << endl;
+    cout << "  DEBUG: Chamada tem " << chamada->parametros.size() << " parametros" << endl;
     
     // Contar parâmetros desta chamada
     int num_params = chamada->parametros.size();
     max_params = max(max_params, num_params);
     
     // Coletar variáveis nos parâmetros
-    for (Expressao* param : chamada->parametros) {
-      coletar_variaveis_em_expressao(param, vars_em_params);
+    for (size_t i = 0; i < chamada->parametros.size(); i++) {
+      cout << "  DEBUG: Analisando parametro " << i << endl;
+      coletar_variaveis_em_expressao(chamada->parametros[i], vars_em_params);
     }
     
     // Analisar recursivamente os parâmetros para chamadas aninhadas
@@ -159,7 +161,12 @@ void FrameFuncao::analisar_expressao_para_chamadas(Expressao* expr, int& max_par
 }
 
 void FrameFuncao::coletar_variaveis_em_expressao(Expressao* expr, set<string>& vars) {
-  if (!expr) return;
+  if (!expr) {
+    cout << "  DEBUG: Expressao nula" << endl;
+    return;
+  }
+  
+  cout << "  DEBUG: Analisando tipo de expressao: " << typeid(*expr).name() << endl;
   
   ExpressaoVariavel* exprVar = dynamic_cast<ExpressaoVariavel*>(expr);
   if (exprVar && exprVar->nome && exprVar->nome->nome.length() > 0) {
@@ -170,6 +177,7 @@ void FrameFuncao::coletar_variaveis_em_expressao(Expressao* expr, set<string>& v
   
   // Para outras expressões compostas, analisar recursivamente
   // (implementar conforme necessário para expressões binárias, etc.)
+  cout << "  DEBUG: Nao eh ExpressaoVariavel" << endl;
 }
 
 void FrameFuncao::alocar_variaveis_internas(Funcao* fun, FrameFuncao* frame) {
