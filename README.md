@@ -187,13 +187,6 @@ SEQ(
 🎯 Árvore IR baseada em Appel
 ```
 
-### Padrões de Design Implementados
-- ✅ **Visitor Pattern**: Travessia da AST
-- ✅ **Strategy Pattern**: Diferentes tipos de expressões
-- ✅ **Factory Pattern**: Criação de objetos de frame
-- ✅ **Polymorphism**: Sistema de acesso a variáveis (FrameAcesso)
-- ✅ **Composite Pattern**: Árvore de representação intermediária
-
 ## 📊 Estatísticas do Projeto
 
 ### Análise Léxica
@@ -414,9 +407,3 @@ O compilador realiza inferência de tipos automática baseada em:
 - **Expressões booleanas** substituem comparadores relacionais
 - **Árvore IR tipada** com statements e expressions
 - **Conversão completa** de AST para IR
-
----
-
-## 🎉 Compilador Smalltalk - Pipeline completo funcionando! 🎉
-
-**Todos os labs implementados (1-5) com representação intermediária real!**
