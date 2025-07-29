@@ -407,3 +407,12 @@ O compilador realiza inferência de tipos automática baseada em:
 - **Expressões booleanas** substituem comparadores relacionais
 - **Árvore IR tipada** com statements e expressions
 - **Conversão completa** de AST para IR
+
+## Autor
+- **Patrick Duarte Pimenta**  
+- Disciplina: Compiladores 2025  
+- Universidade: IFNMG - Campus Montes Claros
+
+---
+
+> *"Like dreamwalkers navigating through the syntax trees of imagination, we build compilers that transform human thoughts into machine understanding."*
