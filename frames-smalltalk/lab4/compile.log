@@ -1,0 +1,185 @@
+mkdir -p bin
+g++ -std=c++20 -Wall -Wextra -g -o bin/analisador src/sol.cpp src/Arvore.cpp src/Gramatica.cpp src/Parser.cpp src/TabelaLR1.cpp src/matriz-util.cpp src/debug-util.cpp src/src-gram-st/Analisador.cpp src/src-gram-st/Comando.cpp src/src-gram-st/ComandoAtribuicao.cpp src/src-gram-st/ComandoLista.cpp src/src-gram-st/ComandoIf.cpp src/src-gram-st/ComandoWhile.cpp src/src-gram-st/Expressao.cpp src/src-gram-st/ExpressaoBoolean.cpp src/src-gram-st/ExpressaoFloat.cpp src/src-gram-st/ExpressaoInt.cpp src/src-gram-st/ExpressaoLogica.cpp src/src-gram-st/ExpressaoRelacional.cpp src/src-gram-st/ExpressaoCondicional.cpp src/src-gram-st/ExpressaoChamadaFuncao.cpp src/src-gram-st/ExpressaoNumero.cpp src/src-gram-st/ExpressaoVariavel.cpp src/src-gram-st/ExpressaoSoma.cpp src/src-gram-st/ExpressaoSubtracao.cpp src/src-gram-st/ExpressaoMultiplicacao.cpp src/src-gram-st/ExpressaoDivisao.cpp src/src-gram-st/ExpressaoMod.cpp src/src-gram-st/ExpressaoBinaria.cpp src/src-gram-st/ExpressaoSelf.cpp src/src-gram-st/Funcao.cpp src/src-gram-st/ID.cpp src/src-gram-st/NUM.cpp src/src-gram-st/Tipo.cpp src/src-gram-st/Variavel.cpp src/Frame-st/FrameFuncao.cpp src/Frame-st/FrameAcesso.cpp src/Frame-st/FrameAcessoNoFrame.cpp src/Frame-st/FrameAcessoTemp.cpp
+src/sol.cpp:84:7: error: unknown type name 'FrameAcessoNoFrame'
+      FrameAcessoNoFrame* acesso = dynamic_cast<FrameAcessoNoFrame*>(param->acesso_frame);
+      ^
+src/sol.cpp:84:49: error: unknown type name 'FrameAcessoNoFrame'
+      FrameAcessoNoFrame* acesso = dynamic_cast<FrameAcessoNoFrame*>(param->acesso_frame);
+                                                ^
+src/sol.cpp:94:7: error: unknown type name 'FrameAcessoNoFrame'
+      FrameAcessoNoFrame* acesso_frame = dynamic_cast<FrameAcessoNoFrame*>(var->acesso_frame);
+      ^
+src/sol.cpp:94:55: error: unknown type name 'FrameAcessoNoFrame'
+      FrameAcessoNoFrame* acesso_frame = dynamic_cast<FrameAcessoNoFrame*>(var->acesso_frame);
+                                                      ^
+src/sol.cpp:95:7: error: unknown type name 'FrameAcessoTemp'; did you mean 'FrameAcesso'?
+      FrameAcessoTemp* acesso_temp = dynamic_cast<FrameAcessoTemp*>(var->acesso_frame);
+      ^~~~~~~~~~~~~~~
+      FrameAcesso
+src/src-gram-st/../Frame-st/FrameAcesso.hpp:5:7: note: 'FrameAcesso' declared here
+class FrameAcesso {
+      ^
+src/sol.cpp:95:51: error: unknown type name 'FrameAcessoTemp'; did you mean 'FrameAcesso'?
+      FrameAcessoTemp* acesso_temp = dynamic_cast<FrameAcessoTemp*>(var->acesso_frame);
+                                                  ^~~~~~~~~~~~~~~
+                                                  FrameAcesso
+src/src-gram-st/../Frame-st/FrameAcesso.hpp:5:7: note: 'FrameAcesso' declared here
+class FrameAcesso {
+      ^
+src/sol.cpp:100:66: error: no member named 'id' in 'FrameAcesso'
+        cout << "  " << var->nome->nome << ": T" << acesso_temp->id << " (pseudo-registrador)" << endl;
+                                                    ~~~~~~~~~~~  ^
+7 errors generated.
+src/Arvore.cpp:31:21: warning: comparison of integers of different signs: 'int' and 'std::vector<No_arv_parse *>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int i = 0; i < no->filhos.size(); ++i) {
+                  ~ ^ ~~~~~~~~~~~~~~~~~
+1 warning generated.
+src/Gramatica.cpp:12:22: warning: comparison of integers of different signs: 'int' and 'std::vector<std::string>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int i = 0 ; i < dir.size(); ++i) {
+                   ~ ^ ~~~~~~~~~~
+src/Gramatica.cpp:22:23: warning: comparison of integers of different signs: 'int' and 'std::vector<std::vector<std::string>>::size_type' (aka 'unsigned long') [-Wsign-compare]
+    for (int i = 0; i < mat.size(); ++i) {
+                    ~ ^ ~~~~~~~~~~
+src/Gramatica.cpp:30:27: warning: comparison of integers of different signs: 'int' and 'std::vector<std::string>::size_type' (aka 'unsigned long') [-Wsign-compare]
+        for (int j = 2; j < mat[i].size();++j) {
+                        ~ ^ ~~~~~~~~~~~~~
+src/Gramatica.cpp:41:21: warning: comparison of integers of different signs: 'int' and 'std::vector<Regra>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int r = 0; r < R.size(); ++r) {
+                  ~ ^ ~~~~~~~~
+src/Gramatica.cpp:43:23: warning: comparison of integers of different signs: 'int' and 'std::vector<std::string>::size_type' (aka 'unsigned long') [-Wsign-compare]
+    for (int j = 0; j < R[r].dir.size(); ++j){
+                    ~ ^ ~~~~~~~~~~~~~~~
+5 warnings generated.
+src/Parser.cpp:57:21: warning: comparison of integers of different signs: 'int' and 'std::vector<std::string>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int i = 0; i < linhas_entrada.size(); ++i) {
+                  ~ ^ ~~~~~~~~~~~~~~~~~~~~~
+src/Parser.cpp:90:18: warning: comparison of integers of different signs: 'int' and 'std::vector<std::string>::size_type' (aka 'unsigned long') [-Wsign-compare]
+        if (pos_entrada != linhas_entrada.size())  {
+            ~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~
+src/Parser.cpp:111:26: warning: comparison of integers of different signs: 'int' and 'std::vector<std::string>::size_type' (aka 'unsigned long') [-Wsign-compare]
+        for(int i = 0; i < r.dir.size(); ++i) {
+                       ~ ^ ~~~~~~~~~~~~
+3 warnings generated.
+src/TabelaLR1.cpp:39:23: warning: comparison of integers of different signs: 'int' and 'std::vector<std::string>::size_type' (aka 'unsigned long') [-Wsign-compare]
+    for (int i = 0; i < regras_LR2.size(); ++i) {
+                    ~ ^ ~~~~~~~~~~~~~~~~~
+src/TabelaLR1.cpp:68:25: warning: comparison of integers of different signs: 'int' and 'std::vector<std::vector<std::string>>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int lin = 0; lin < M.size(); ++lin) {
+                    ~~~ ^ ~~~~~~~~
+src/TabelaLR1.cpp:84:25: warning: comparison of integers of different signs: 'int' and 'std::vector<std::vector<std::string>>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int lin = 0; lin < mat.size(); ++lin) {
+                    ~~~ ^ ~~~~~~~~~~
+src/TabelaLR1.cpp:96:21: warning: comparison of integers of different signs: 'int' and 'std::vector<std::map<std::string, Transicao>>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int i = 0; i < Tab.size(); ++i) {
+                  ~ ^ ~~~~~~~~~~
+4 warnings generated.
+src/matriz-util.cpp:32:21: warning: comparison of integers of different signs: 'int' and 'std::vector<std::vector<std::string>>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int l = 0; l < mat.size(); ++l){ 
+                  ~ ^ ~~~~~~~~~~
+src/matriz-util.cpp:34:23: warning: comparison of integers of different signs: 'int' and 'std::vector<std::string>::size_type' (aka 'unsigned long') [-Wsign-compare]
+    for (int c = 0; c < mat[l].size();++c){
+                    ~ ^ ~~~~~~~~~~~~~
+2 warnings generated.
+src/src-gram-st/Comando.cpp:219:61: warning: unused parameter 'variaveis' [-Wunused-parameter]
+bool Comando::verificar_tipos_semanticos(vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                            ^
+src/src-gram-st/Comando.cpp:219:97: warning: unused parameter 'parametros' [-Wunused-parameter]
+bool Comando::verificar_tipos_semanticos(vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                                                                ^
+2 warnings generated.
+src/src-gram-st/ComandoLista.cpp:11:23: warning: comparison of integers of different signs: 'int' and 'std::vector<Variavel *>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int iv = 0; iv < lista_variaveis.size(); ++iv) {
+                   ~~ ^ ~~~~~~~~~~~~~~~~~~~~~~
+src/src-gram-st/ComandoLista.cpp:14:23: warning: comparison of integers of different signs: 'int' and 'std::vector<Comando *>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int ic = 0; ic < lista_comandos.size(); ++ic) {
+                   ~~ ^ ~~~~~~~~~~~~~~~~~~~~~
+2 warnings generated.
+src/src-gram-st/Expressao.cpp:212:59: warning: unused parameter 'variaveis' [-Wunused-parameter]
+Tipo* Expressao::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                          ^
+src/src-gram-st/Expressao.cpp:212:95: warning: unused parameter 'parametros' [-Wunused-parameter]
+Tipo* Expressao::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                                                              ^
+2 warnings generated.
+src/src-gram-st/ExpressaoBoolean.cpp:14:66: warning: unused parameter 'variaveis' [-Wunused-parameter]
+Tipo* ExpressaoBoolean::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                                 ^
+src/src-gram-st/ExpressaoBoolean.cpp:14:102: warning: unused parameter 'parametros' [-Wunused-parameter]
+Tipo* ExpressaoBoolean::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                                                                     ^
+src/src-gram-st/ExpressaoBoolean.cpp:18:68: warning: unused parameter 'valores_variaveis' [-Wunused-parameter]
+double ExpressaoBoolean::calcular_valor(const map<string, double>& valores_variaveis) {
+                                                                   ^
+3 warnings generated.
+src/src-gram-st/ExpressaoFloat.cpp:15:64: warning: unused parameter 'variaveis' [-Wunused-parameter]
+Tipo* ExpressaoFloat::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                               ^
+src/src-gram-st/ExpressaoFloat.cpp:15:100: warning: unused parameter 'parametros' [-Wunused-parameter]
+Tipo* ExpressaoFloat::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                                                                   ^
+src/src-gram-st/ExpressaoFloat.cpp:19:66: warning: unused parameter 'valores_variaveis' [-Wunused-parameter]
+double ExpressaoFloat::calcular_valor(const map<string, double>& valores_variaveis) {
+                                                                 ^
+3 warnings generated.
+src/src-gram-st/ExpressaoInt.cpp:15:62: warning: unused parameter 'variaveis' [-Wunused-parameter]
+Tipo* ExpressaoInt::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                             ^
+src/src-gram-st/ExpressaoInt.cpp:15:98: warning: unused parameter 'parametros' [-Wunused-parameter]
+Tipo* ExpressaoInt::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                                                                 ^
+src/src-gram-st/ExpressaoInt.cpp:19:64: warning: unused parameter 'valores_variaveis' [-Wunused-parameter]
+double ExpressaoInt::calcular_valor(const map<string, double>& valores_variaveis) {
+                                                               ^
+3 warnings generated.
+src/src-gram-st/ExpressaoChamadaFuncao.cpp:87:82: warning: unused parameter 'no' [-Wunused-parameter]
+vector<Expressao*> ExpressaoChamadaFuncao::extrai_lista_parametros(No_arv_parse* no) {
+                                                                                 ^
+src/src-gram-st/ExpressaoChamadaFuncao.cpp:125:74: warning: unused parameter 'valores_variaveis' [-Wunused-parameter]
+double ExpressaoChamadaFuncao::calcular_valor(const map<string, double>& valores_variaveis) {
+                                                                         ^
+2 warnings generated.
+src/src-gram-st/ExpressaoNumero.cpp:17:65: warning: unused parameter 'variaveis' [-Wunused-parameter]
+Tipo* ExpressaoNumero::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                                ^
+src/src-gram-st/ExpressaoNumero.cpp:17:101: warning: unused parameter 'parametros' [-Wunused-parameter]
+Tipo* ExpressaoNumero::verificar_tipos(const vector<Variavel*>& variaveis, const vector<Variavel*>& parametros) {
+                                                                                                    ^
+src/src-gram-st/ExpressaoNumero.cpp:21:67: warning: unused parameter 'valores_variaveis' [-Wunused-parameter]
+double ExpressaoNumero::calcular_valor(const map<string, double>& valores_variaveis) {
+                                                                  ^
+3 warnings generated.
+src/src-gram-st/Funcao.cpp:115:23: warning: comparison of integers of different signs: 'int' and 'std::vector<Variavel *>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int iv = 0; iv < vars.size(); ++iv) {
+                   ~~ ^ ~~~~~~~~~~~
+src/src-gram-st/Funcao.cpp:122:23: warning: comparison of integers of different signs: 'int' and 'std::vector<Comando *>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int ic = 0; ic < coms.size(); ++ic) {
+                   ~~ ^ ~~~~~~~~~~~
+src/src-gram-st/Funcao.cpp:133:29: warning: comparison of integers of different signs: 'int' and 'std::vector<Variavel *>::size_type' (aka 'unsigned long') [-Wsign-compare]
+  for (int i_par = 0; i_par < parametros.size(); ++i_par) {
+                      ~~~~~ ^ ~~~~~~~~~~~~~~~~~
+3 warnings generated.
+src/Frame-st/FrameFuncao.cpp:80:87: warning: unused parameter 'variaveis_em_parametros' [-Wunused-parameter]
+void FrameFuncao::buscar_variaveis_em_parametros_recursivo(Comando* cmd, set<string>& variaveis_em_parametros) {
+                                                                                      ^
+src/Frame-st/FrameFuncao.cpp:112:75: warning: unused parameter 'frame' [-Wunused-parameter]
+void FrameFuncao::configurar_parametros_entrada(Funcao* fun, FrameFuncao* frame) {
+                                                                          ^
+2 warnings generated.
+In file included from src/Frame-st/FrameAcesso.cpp:1:
+src/Frame-st/FrameAcesso.hpp:3:17: warning: using directive refers to implicitly-defined namespace 'std'
+using namespace std;
+                ^
+1 warning generated.
+In file included from src/Frame-st/FrameAcessoNoFrame.cpp:1:
+In file included from src/Frame-st/FrameAcessoNoFrame.hpp:4:
+src/Frame-st/FrameAcesso.hpp:3:17: warning: using directive refers to implicitly-defined namespace 'std'
+using namespace std;
+                ^
+1 warning generated.
+In file included from src/Frame-st/FrameAcessoTemp.cpp:1:
+In file included from src/Frame-st/FrameAcessoTemp.hpp:4:
+src/Frame-st/FrameAcesso.hpp:3:17: warning: using directive refers to implicitly-defined namespace 'std'
+using namespace std;
+                ^
+1 warning generated.
+make: *** [bin/analisador] Error 1

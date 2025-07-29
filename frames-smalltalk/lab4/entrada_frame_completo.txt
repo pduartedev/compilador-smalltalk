@@ -1,0 +1,14 @@
+Teste subclass: MinhaClasse [
+  processar: x com: y [
+    | a b c resultado |
+    
+    a := x + 1.
+    b := y * 2.
+    c := 10.
+    
+    resultado := calcular: a with: (b + c).
+    resultado := outraFuncao: a.
+    
+    ^ resultado
+  ]
+]

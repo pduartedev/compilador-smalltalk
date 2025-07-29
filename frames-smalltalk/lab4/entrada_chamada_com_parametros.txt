@@ -1,0 +1,13 @@
+TOKEN_identifier exemplo
+TOKEN_assignment_operator :=
+TOKEN_identifier self
+TOKEN_keyword processar
+TOKEN_identifier a
+TOKEN_keyword com
+TOKEN_left_paren (
+TOKEN_identifier b
+TOKEN_binary_selector +
+TOKEN_identifier c
+TOKEN_right_paren )
+TOKEN_period .
+$ $
