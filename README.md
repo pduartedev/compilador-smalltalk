@@ -27,6 +27,7 @@ compilador-smalltalk/
 │   └── gramatica-st/              # 📋 Gramática e tabela LR1
 ├── ins-st/                        # 📝 Programas Smalltalk (30 arquivos)
 ├── ins-tokens-st/                 # 🎯 Tokens gerados
+├── doc/                           # Enunciados e PDF de apoio
 ├── bin/                           # 🔧 Executáveis compilados
 ├── Makefile                       # 🤖 Pipeline automatizado
 └── README.md                      # 📖 Este arquivo
